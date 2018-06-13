@@ -7,23 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8991ECD620CDB6A90031BE97 /* spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991ECD520CDB6A90031BE97 /* spot.swift */; };
 		89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */; };
-		89ABB4CD20BB38FC00104C1D /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CC20BB38FC00104C1D /* FirstViewController.swift */; };
-		89ABB4CF20BB38FC00104C1D /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CE20BB38FC00104C1D /* SecondViewController.swift */; };
+		89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */; };
+		89ABB4CF20BB38FC00104C1D /* addViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CE20BB38FC00104C1D /* addViewController.swift */; };
 		89ABB4D220BB38FC00104C1D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89ABB4D020BB38FC00104C1D /* Main.storyboard */; };
 		89ABB4D420BB38FC00104C1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89ABB4D320BB38FC00104C1D /* Assets.xcassets */; };
 		89ABB4D720BB38FC00104C1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89ABB4D520BB38FC00104C1D /* LaunchScreen.storyboard */; };
+		89B4794520D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */; };
+		89B4794720D17D9500F64CC8 /* justTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B4794620D17D9500F64CC8 /* justTitleTableViewCell.swift */; };
+		89B4794920D17ED300F64CC8 /* windSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B4794820D17ED300F64CC8 /* windSpeed.swift */; };
+		89B4794D20D1856700F64CC8 /* gear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B4794C20D1856700F64CC8 /* gear.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8991ECD520CDB6A90031BE97 /* spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = spot.swift; sourceTree = "<group>"; };
 		89ABB4C720BB38FC00104C1D /* canIGetALaunch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = canIGetALaunch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		89ABB4CC20BB38FC00104C1D /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		89ABB4CE20BB38FC00104C1D /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = spotsViewController.swift; sourceTree = "<group>"; };
+		89ABB4CE20BB38FC00104C1D /* addViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addViewController.swift; sourceTree = "<group>"; };
 		89ABB4D120BB38FC00104C1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89ABB4D320BB38FC00104C1D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89ABB4D620BB38FC00104C1D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89ABB4D820BB38FC00104C1D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = windSpeedPickerTableViewCell.swift; sourceTree = "<group>"; };
+		89B4794620D17D9500F64CC8 /* justTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = justTitleTableViewCell.swift; sourceTree = "<group>"; };
+		89B4794820D17ED300F64CC8 /* windSpeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = windSpeed.swift; sourceTree = "<group>"; };
+		89B4794C20D1856700F64CC8 /* gear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gear.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +66,36 @@
 		89ABB4C920BB38FC00104C1D /* canIGetALaunch */ = {
 			isa = PBXGroup;
 			children = (
+				89B4794B20D17F7D00F64CC8 /* classes */,
+				89B4794A20D17F6100F64CC8 /* cells */,
 				89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */,
-				89ABB4CC20BB38FC00104C1D /* FirstViewController.swift */,
-				89ABB4CE20BB38FC00104C1D /* SecondViewController.swift */,
+				89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */,
+				89ABB4CE20BB38FC00104C1D /* addViewController.swift */,
 				89ABB4D020BB38FC00104C1D /* Main.storyboard */,
 				89ABB4D320BB38FC00104C1D /* Assets.xcassets */,
 				89ABB4D520BB38FC00104C1D /* LaunchScreen.storyboard */,
 				89ABB4D820BB38FC00104C1D /* Info.plist */,
 			);
 			path = canIGetALaunch;
+			sourceTree = "<group>";
+		};
+		89B4794A20D17F6100F64CC8 /* cells */ = {
+			isa = PBXGroup;
+			children = (
+				89B4794620D17D9500F64CC8 /* justTitleTableViewCell.swift */,
+				89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */,
+			);
+			name = cells;
+			sourceTree = "<group>";
+		};
+		89B4794B20D17F7D00F64CC8 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				89B4794820D17ED300F64CC8 /* windSpeed.swift */,
+				8991ECD520CDB6A90031BE97 /* spot.swift */,
+				89B4794C20D1856700F64CC8 /* gear.swift */,
+			);
+			name = classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,9 +171,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89ABB4CF20BB38FC00104C1D /* SecondViewController.swift in Sources */,
+				89B4794720D17D9500F64CC8 /* justTitleTableViewCell.swift in Sources */,
+				89B4794920D17ED300F64CC8 /* windSpeed.swift in Sources */,
+				89ABB4CF20BB38FC00104C1D /* addViewController.swift in Sources */,
+				89B4794520D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift in Sources */,
+				89B4794D20D1856700F64CC8 /* gear.swift in Sources */,
 				89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */,
-				89ABB4CD20BB38FC00104C1D /* FirstViewController.swift in Sources */,
+				89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */,
+				8991ECD620CDB6A90031BE97 /* spot.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +342,7 @@
 				89ABB4DD20BB38FC00104C1D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
