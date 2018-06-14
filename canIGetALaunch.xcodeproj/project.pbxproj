@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8904A48F20D193E70067D328 /* gearPickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A48E20D193E70067D328 /* gearPickerTableViewCell.swift */; };
+		8904A49320D1DDB20067D328 /* session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A49220D1DDB20067D328 /* session.swift */; };
+		8904A49520D1DF470067D328 /* kiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A49420D1DF470067D328 /* kiter.swift */; };
+		8904A49720D1E3350067D328 /* datePickerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A49620D1E3350067D328 /* datePickerTableViewCell.swift */; };
+		8904A49B20D2D87A0067D328 /* createSpotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A49A20D2D87A0067D328 /* createSpotViewController.swift */; };
 		8991ECD620CDB6A90031BE97 /* spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991ECD520CDB6A90031BE97 /* spot.swift */; };
 		89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */; };
 		89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */; };
@@ -21,6 +26,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8904A48E20D193E70067D328 /* gearPickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gearPickerTableViewCell.swift; sourceTree = "<group>"; };
+		8904A49220D1DDB20067D328 /* session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = session.swift; sourceTree = "<group>"; };
+		8904A49420D1DF470067D328 /* kiter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = kiter.swift; sourceTree = "<group>"; };
+		8904A49620D1E3350067D328 /* datePickerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = datePickerTableViewCell.swift; sourceTree = "<group>"; };
+		8904A49A20D2D87A0067D328 /* createSpotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = createSpotViewController.swift; sourceTree = "<group>"; };
 		8991ECD520CDB6A90031BE97 /* spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = spot.swift; sourceTree = "<group>"; };
 		89ABB4C720BB38FC00104C1D /* canIGetALaunch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = canIGetALaunch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +82,7 @@
 				89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */,
 				89ABB4CE20BB38FC00104C1D /* addViewController.swift */,
 				89ABB4D020BB38FC00104C1D /* Main.storyboard */,
+				8904A49A20D2D87A0067D328 /* createSpotViewController.swift */,
 				89ABB4D320BB38FC00104C1D /* Assets.xcassets */,
 				89ABB4D520BB38FC00104C1D /* LaunchScreen.storyboard */,
 				89ABB4D820BB38FC00104C1D /* Info.plist */,
@@ -82,8 +93,10 @@
 		89B4794A20D17F6100F64CC8 /* cells */ = {
 			isa = PBXGroup;
 			children = (
+				8904A49620D1E3350067D328 /* datePickerTableViewCell.swift */,
 				89B4794620D17D9500F64CC8 /* justTitleTableViewCell.swift */,
 				89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */,
+				8904A48E20D193E70067D328 /* gearPickerTableViewCell.swift */,
 			);
 			name = cells;
 			sourceTree = "<group>";
@@ -94,6 +107,8 @@
 				89B4794820D17ED300F64CC8 /* windSpeed.swift */,
 				8991ECD520CDB6A90031BE97 /* spot.swift */,
 				89B4794C20D1856700F64CC8 /* gear.swift */,
+				8904A49220D1DDB20067D328 /* session.swift */,
+				8904A49420D1DF470067D328 /* kiter.swift */,
 			);
 			name = classes;
 			sourceTree = "<group>";
@@ -173,12 +188,17 @@
 			files = (
 				89B4794720D17D9500F64CC8 /* justTitleTableViewCell.swift in Sources */,
 				89B4794920D17ED300F64CC8 /* windSpeed.swift in Sources */,
+				8904A49320D1DDB20067D328 /* session.swift in Sources */,
 				89ABB4CF20BB38FC00104C1D /* addViewController.swift in Sources */,
 				89B4794520D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift in Sources */,
 				89B4794D20D1856700F64CC8 /* gear.swift in Sources */,
+				8904A49B20D2D87A0067D328 /* createSpotViewController.swift in Sources */,
 				89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */,
+				8904A49720D1E3350067D328 /* datePickerTableViewCell.swift in Sources */,
 				89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */,
 				8991ECD620CDB6A90031BE97 /* spot.swift in Sources */,
+				8904A49520D1DF470067D328 /* kiter.swift in Sources */,
+				8904A48F20D193E70067D328 /* gearPickerTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

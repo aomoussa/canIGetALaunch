@@ -11,15 +11,51 @@ import MapKit
 
 class spotsViewController: UIViewController, MKMapViewDelegate {
     
+    @IBOutlet weak var spotTitle: UILabel!
+    @IBOutlet weak var backButton: UIButton!
+    @IBAction func backButtonTapped(_ sender: UIButton) {
+        switchSpotState()
+    }
+    
+    
     let locationManager = CLLocationManager()
     var annots = [MKPointAnnotation()]
     
+    var selectedSpot = spot()
+    var state = "allSpots"//"oneSpot"
+    
+    
+    
+    
+    func switchSpotState()
+    {
+        for annot in mapView.annotations{
+            self.mapView.deselectAnnotation(annot, animated: false)
+        }
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        switch(state)
+        {
+        case "allSpots":
+            state = "oneSpot"
+            spotTitle.text = "selected spot: \(selectedSpot.title)"
+            backButton.alpha = 1
+            self.displaySpot(spot: selectedSpot)
+        default:
+            state = "allSpots"
+            spotTitle.text = "spots"
+            backButton.alpha = 0
+            addAnnotsToMap(annots: annots)
+            //
+        }
+        //self.mapView.showAnnotations(self.mapView.annotations, animated: false)
+        
+        
+    }
     func populateSpots()
     {
-        allSpots.append(spot(title: "crissy", parkHere: CLLocationCoordinate2D(latitude: 37.8056381,longitude: -122.4519855), rigHere: CLLocationCoordinate2D(latitude: 12,longitude: 11), launchHere: CLLocationCoordinate2D(latitude: 23,longitude: 56), waterStartHere: CLLocationCoordinate2D(latitude: 33,longitude: 33)))
-        allSpots.append(spot(title: "3rd", parkHere: CLLocationCoordinate2D(latitude: 37.5728303,longitude: -122.2794598), rigHere: CLLocationCoordinate2D(latitude: 12,longitude: 11), launchHere: CLLocationCoordinate2D(latitude: 23,longitude: 56), waterStartHere: CLLocationCoordinate2D(latitude: 33,longitude: 33)))
-        allSpots.append(spot(title: "alameda", parkHere: CLLocationCoordinate2D(latitude: 37.7632836,longitude: -122.2720435), rigHere: CLLocationCoordinate2D(latitude: 12,longitude: 11), launchHere: CLLocationCoordinate2D(latitude: 23,longitude: 56), waterStartHere: CLLocationCoordinate2D(latitude: 33,longitude: 33)))
-        
+        allSpots.append(spot(title: "crissy", parkHere: CLLocationCoordinate2D(latitude: 37.8056381,longitude: -122.4519855), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
+        allSpots.append(spot(title: "3rd", parkHere: CLLocationCoordinate2D(latitude: 37.5728303,longitude: -122.2794598), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
+        allSpots.append(spot(title: "alameda", parkHere: CLLocationCoordinate2D(latitude: 37.7632836,longitude: -122.2720435), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
         for spot in allSpots {
             let annot = MKPointAnnotation()
             annot.coordinate = spot.parkHere
@@ -29,8 +65,17 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
             //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
             annots.append(annot)
         }
+        mapView.showAnnotations(self.mapView.annotations, animated: true)
+    }
+    func addAnnotsToMap(annots: [MKPointAnnotation])
+    {
+        for annot in annots {
+            mapView.addAnnotation(annot)
+        }
+        mapView.setRegion(MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)), animated: true)
+        //mapView.setCenter(mapView.userLocation.coordinate, animated: true)
         
-        
+        //mapView.showAnnotations(self.mapView.annotations, animated: true)
     }
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
@@ -40,42 +85,58 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestWhenInUseAuthorization()
         locationManager.requestLocation()
         mapView.delegate = self
-        
+        mapView.showsUserLocation = true
         populateSpots()
-        
-        
         
         // Do any additional setup after loading the view, typically from a nib.
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        mapView.showAnnotations(self.mapView.annotations, animated: false)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        mapView.removeAnnotations(mapView.annotations)
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let annot = view.annotation
-        let i = annots.index(of: annot as! MKPointAnnotation)  //(where: {$0.equals(annot)})
-        print(i)
-        self.displaySpot(spot: allSpots[i!])
+        switch(state)
+        {
+        case "oneSpot":
+            break
+        default:
+            let annot = view.annotation
+            let i = annots.index(of: annot as! MKPointAnnotation)  //(where: {$0.equals(annot)})
+            print(i)
+            selectedSpot = allSpots[i! - 1]
+            switchSpotState()
+        }
+        
     }
     func displaySpot(spot: spot)
     {
-        self.mapView.removeAnnotations(self.mapView.annotations)
         let parkHere = MKPointAnnotation()
-        parkHere.coordinate = spot.parkHere
         parkHere.title = "park here"
         
+        parkHere.coordinate.latitude = spot.parkHere.latitude
+        parkHere.coordinate.longitude = spot.parkHere.longitude
+        
         let rigHere = MKPointAnnotation()
-        rigHere.coordinate = spot.rigHere
         rigHere.title = "rig here"
         
+        rigHere.coordinate.latitude = spot.rigHere.latitude
+        rigHere.coordinate.longitude = spot.rigHere.longitude
+        
         let launchHere = MKPointAnnotation()
-        launchHere.coordinate = spot.launchHere
         launchHere.title = "launch here"
         
+        launchHere.coordinate.latitude = spot.launchHere.latitude
+        launchHere.coordinate.longitude = spot.launchHere.longitude
+        
         let waterStartHere = MKPointAnnotation()
-        waterStartHere.coordinate = spot.waterStartHere
         waterStartHere.title = "water start"
+        
+        waterStartHere.coordinate.latitude = spot.waterStartHere.latitude
+        waterStartHere.coordinate.longitude = spot.waterStartHere.longitude
         
         
         self.mapView.addAnnotation(parkHere)
@@ -83,8 +144,10 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         self.mapView.addAnnotation(launchHere)
         self.mapView.addAnnotation(waterStartHere)
         
-        self.mapView.reloadInputViews()
-        self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+        let annotationsToShow = mapView.annotations.filter { $0 !== mapView.userLocation }
+        self.mapView.showAnnotations(annotationsToShow, animated: true)
+        //self.mapView.reloadInputViews()
+        
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if !(annotation is MKPointAnnotation) {
@@ -96,8 +159,12 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         var anView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
         if anView == nil {
             anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            
             switch((annotation.title!)!)
             {
+            case "park here":
+                anView?.image = UIImage(named:"park.png")
+                break
             case "rig here":
                 anView?.image = UIImage(named:"airpump.png")
                 break
@@ -107,27 +174,59 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
             case "water start":
                 anView?.image = UIImage(named:"waterStart.png")
                 break
+            case "your location":
+                anView?.image = UIImage(named:"first.jpg")
+                break
             default:
                 anView?.image = UIImage(named:"launch.png")
+            }
+            for sesh in allSessions{
+                
+                if(sesh.seshSpot.title == (annotation.title!)!)
+                {
+                    anView?.image = UIImage(named: "second.jpg")
+                }
+                
             }
             anView?.canShowCallout = true
         }
         else {
-            switch((annotation.title!)!)
+            if let title = annotation.title!
             {
-            case "rig here":
-                anView?.image = UIImage(named:"airpump.png")
-                break
-            case "launch here":
-                anView?.image = UIImage(named:"launch.png")
-                break
-            case "water start":
-                anView?.image = UIImage(named:"waterStart.png")
-                break
-            default:
-                anView?.image = UIImage(named:"launch.png")
+                
+                switch(title)
+                {
+                case "park here":
+                    anView?.image = UIImage(named:"park.png")
+                    break
+                case "rig here":
+                    anView?.image = UIImage(named:"airpump.png")
+                    break
+                case "launch here":
+                    anView?.image = UIImage(named:"launch.png")
+                    break
+                case "water start":
+                    anView?.image = UIImage(named:"waterStart.png")
+                    break
+                case "your location":
+                    anView?.image = UIImage(named:"first.jpg")
+                    break
+                default:
+                    anView?.image = UIImage(named:"launch.png")
+                }
+                anView?.annotation = annotation
             }
-            anView?.annotation = annotation
+            else{
+                print("problem")
+            }
+            for sesh in allSessions{
+                
+                if(sesh.seshSpot.title == title)
+                {
+                    anView?.image = UIImage(named: "second.jpg")
+                }
+                
+            }
         }
         
         return anView
