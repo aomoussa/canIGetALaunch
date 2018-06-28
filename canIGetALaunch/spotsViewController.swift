@@ -8,13 +8,14 @@
 
 import UIKit
 import MapKit
+import AWSDynamoDB
 
 class spotsViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var spotTitle: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBAction func backButtonTapped(_ sender: UIButton) {
-        switchSpotState()
+        switchSpotState(to: "allSpots")
     }
     
     
@@ -27,24 +28,41 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
     
     
     
-    func switchSpotState()
+    func switchSpotState(to: String)
     {
         for annot in mapView.annotations{
             self.mapView.deselectAnnotation(annot, animated: false)
         }
         self.mapView.removeAnnotations(self.mapView.annotations)
+        state = to
         switch(state)
         {
-        case "allSpots":
-            state = "oneSpot"
+        case "oneSpot":
             spotTitle.text = "selected spot: \(selectedSpot.title)"
             backButton.alpha = 1
             self.displaySpot(spot: selectedSpot)
         default:
-            state = "allSpots"
             spotTitle.text = "spots"
             backButton.alpha = 0
-            addAnnotsToMap(annots: annots)
+            if(allSpots.count == 0)
+            {
+                populateSpots()
+            }
+            else if(annots.count == 0)
+            {
+                for spot in allSpots
+                {
+                    let annot = MKPointAnnotation()
+                    annot.coordinate = spot.parkHere
+                    annot.title = spot.title
+                    
+                    
+                    self.mapView.addAnnotation(annot)
+                    self.annots.append(annot)
+                }
+                
+            }
+            mapView.showAnnotations(self.mapView.annotations, animated: true)
             //
         }
         //self.mapView.showAnnotations(self.mapView.annotations, animated: false)
@@ -53,30 +71,67 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
     }
     func populateSpots()
     {
-        allSpots.append(spot(title: "crissy", parkHere: CLLocationCoordinate2D(latitude: 37.8056381,longitude: -122.4519855), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
-        allSpots.append(spot(title: "3rd", parkHere: CLLocationCoordinate2D(latitude: 37.5728303,longitude: -122.2794598), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
-        allSpots.append(spot(title: "alameda", parkHere: CLLocationCoordinate2D(latitude: 37.7632836,longitude: -122.2720435), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
-        for spot in allSpots {
-            let annot = MKPointAnnotation()
-            annot.coordinate = spot.parkHere
-            annot.title = spot.title
-            
-            mapView.addAnnotation(annot)
-            //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
-            annots.append(annot)
+        /*
+         allSpots.append(spot(title: "crissy", parkHere: CLLocationCoordinate2D(latitude: 37.8056381,longitude: -122.4519855), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
+         allSpots.append(spot(title: "3rd", parkHere: CLLocationCoordinate2D(latitude: 37.5728303,longitude: -122.2794598), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
+         allSpots.append(spot(title: "alameda", parkHere: CLLocationCoordinate2D(latitude: 37.7632836,longitude: -122.2720435), rigHere: CLLocationCoordinate2D(latitude: 37.8057057,longitude: -122.4518460), launchHere: CLLocationCoordinate2D(latitude: 37.8064037,longitude: -122.4530168), waterStartHere: CLLocationCoordinate2D(latitude: 37.8067393,longitude: -122.4530960)))
+         */
+        self.annots.removeAll()
+        let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            if error != nil {
+                print("The request failed. Error: \(String(describing: error))")
+            }
+            if output != nil {
+                for dspot in output!.items {
+                    let spotItem = dspot as? Spot
+                    print("\(spotItem!._title!)")
+                    let normalSpot = spot(fromSpot: spotItem!)
+                    allSpots.append(normalSpot)
+                    let annot = MKPointAnnotation()
+                    annot.coordinate = normalSpot.parkHere
+                    annot.title = normalSpot.title
+                    self.mapView.addAnnotation(annot)
+                    //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
+                    self.annots.append(annot)
+                    
+                }
+                
+                
+                self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+            }
         }
-        mapView.showAnnotations(self.mapView.annotations, animated: true)
+        DBDownload.querySpots(completionHandler: completionHandler)
     }
-    func addAnnotsToMap(annots: [MKPointAnnotation])
+    /*
+    func populateSessions()
     {
-        for annot in annots {
-            mapView.addAnnotation(annot)
+        let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            if error != nil {
+                print("The request failed. Error: \(String(describing: error))")
+            }
+            if output != nil {
+                for dsesh in output!.items {
+                    let sessionItem = dsesh as? Session
+                    print("\(sessionItem!._spotTitle!)")
+                    let normalSesh = session(fromSession: sessionItem!)
+                    allSpots.append(normalSpot)
+                    let annot = MKPointAnnotation()
+                    annot.coordinate = normalSpot.parkHere
+                    annot.title = normalSpot.title
+                    self.mapView.addAnnotation(annot)
+                    //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
+                    self.annots.append(annot)
+                    
+                }
+                
+                
+                self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+            }
         }
-        mapView.setRegion(MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)), animated: true)
-        //mapView.setCenter(mapView.userLocation.coordinate, animated: true)
-        
-        //mapView.showAnnotations(self.mapView.annotations, animated: true)
-    }
+        DBDownload.querySessions(completionHandler: completionHandler)
+
+    }*/
+    
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,11 +141,15 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestLocation()
         mapView.delegate = self
         mapView.showsUserLocation = true
-        populateSpots()
+        if(allSpots.count == 0)
+        {
+            populateSpots()
+        }
         
         // Do any additional setup after loading the view, typically from a nib.
     }
     override func viewWillAppear(_ animated: Bool) {
+        switchSpotState(to: "allSpots")
         mapView.showAnnotations(self.mapView.annotations, animated: false)
     }
     override func didReceiveMemoryWarning() {
@@ -99,16 +158,20 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         mapView.removeAnnotations(mapView.annotations)
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+
         switch(state)
         {
         case "oneSpot":
             break
         default:
-            let annot = view.annotation
+            if let annot  = view.annotation 
+
+            {
             let i = annots.index(of: annot as! MKPointAnnotation)  //(where: {$0.equals(annot)})
-            print(i)
+            print(i ?? 0)
             selectedSpot = allSpots[i! - 1]
-            switchSpotState()
+                switchSpotState(to: "oneSpot")
+            }
         }
         
     }
@@ -160,33 +223,37 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         if anView == nil {
             anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             
-            switch((annotation.title!)!)
-            {
-            case "park here":
-                anView?.image = UIImage(named:"park.png")
-                break
-            case "rig here":
-                anView?.image = UIImage(named:"airpump.png")
-                break
-            case "launch here":
-                anView?.image = UIImage(named:"launch.png")
-                break
-            case "water start":
-                anView?.image = UIImage(named:"waterStart.png")
-                break
-            case "your location":
-                anView?.image = UIImage(named:"first.jpg")
-                break
-            default:
-                anView?.image = UIImage(named:"launch.png")
-            }
-            for sesh in allSessions{
-                
-                if(sesh.seshSpot.title == (annotation.title!)!)
+            if((annotation.title!) != nil){
+                switch((annotation.title!)!)
                 {
-                    anView?.image = UIImage(named: "second.jpg")
+                case "park here":
+                    anView?.image = UIImage(named:"park.png")
+                    break
+                case "rig here":
+                    anView?.image = UIImage(named:"airpump.png")
+                    break
+                case "launch here":
+                    anView?.image = UIImage(named:"launch.png")
+                    break
+                case "water start":
+                    anView?.image = UIImage(named:"waterStart.png")
+                    break
+                case "your location":
+                    anView?.image = thisKiter.imageFromBitmoji()
+                    break
+                default:
+                    anView?.image = thisKiter.imageFromBitmoji()
                 }
                 
+                
+                for sesh in allSessions{
+                    
+                    if(sesh.seshSpot.title == (annotation.title!)!)
+                    {
+                        anView?.image = thisKiter.imageFromBitmoji()//UIImage(named: "second.jpg")
+                    }
+                    
+                }
             }
             anView?.canShowCallout = true
         }
@@ -209,10 +276,10 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     anView?.image = UIImage(named:"waterStart.png")
                     break
                 case "your location":
-                    anView?.image = UIImage(named:"first.jpg")
+                    anView?.image = thisKiter.imageFromBitmoji()
                     break
                 default:
-                    anView?.image = UIImage(named:"launch.png")
+                    anView?.image = thisKiter.imageFromBitmoji()
                 }
                 anView?.annotation = annotation
             }
@@ -223,7 +290,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                 
                 if(sesh.seshSpot.title == title)
                 {
-                    anView?.image = UIImage(named: "second.jpg")
+                    anView?.image = thisKiter.imageFromBitmoji()
                 }
                 
             }

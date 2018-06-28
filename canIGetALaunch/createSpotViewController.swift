@@ -10,128 +10,302 @@ import UIKit
 import MapKit
 
 class createSpotViewController: UIViewController {
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var spotNameSection = 0
+    var spotLocationsSection = 1
+    var difficultySection = 2
+    var windDirectionSection = 3
+    var seasonSection = 4
+    var submitSection = 5
+    
+    var spotNameState = "max"//min//picked
+    var spotLocationPickerState = "max"//min//saved?
+    var difficultyState = "max"//min
+    var windDirectionState = "max"//min//picked
+    var seasonState = "max"//"min"
+    var submitState = "unpicked"//picked
+    
 
-    @IBOutlet weak var rigHereImage: UIImageView!
-    @IBOutlet weak var launchHereImage: UIImageView!
-    @IBOutlet weak var waterStartHereImage: UIImageView!
-    @IBOutlet weak var parkHereImage: UIImageView!
-    @IBOutlet weak var mapView: MKMapView!
     
-    var parkDrag = UIPanGestureRecognizer()
-    var rigDrag = UIPanGestureRecognizer()
-    var launchDrag = UIPanGestureRecognizer()
-    var waterStartDrag = UIPanGestureRecognizer()
     
-    var parkCoordinates = CLLocationCoordinate2D()
-    var rigCoordinates = CLLocationCoordinate2D()
-    var launchCoordinates = CLLocationCoordinate2D()
-    var waterStartCoordinates = CLLocationCoordinate2D()
     
-    @IBAction func saveTapped(_ sender: UIButton) {
-        saveLocations()
-    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        parkDrag = UIPanGestureRecognizer(target: self, action: #selector(self.draggedParkView(_:)))
-        parkHereImage.isUserInteractionEnabled = true
-        parkHereImage.addGestureRecognizer(parkDrag)
-        
-        rigDrag = UIPanGestureRecognizer(target: self, action: #selector(self.draggedRigView(_:)))
-        rigHereImage.isUserInteractionEnabled = true
-        rigHereImage.addGestureRecognizer(rigDrag)
-        
-        launchDrag = UIPanGestureRecognizer(target: self, action: #selector(self.draggedLaunchView(_:)))
-        launchHereImage.isUserInteractionEnabled = true
-        launchHereImage.addGestureRecognizer(launchDrag)
-        
-        waterStartDrag = UIPanGestureRecognizer(target: self, action: #selector(self.draggedWaterStartView(_:)))
-        waterStartHereImage.isUserInteractionEnabled = true
-        waterStartHereImage.addGestureRecognizer(waterStartDrag)
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         // Do any additional setup after loading the view.
     }
-    func draggedParkView(_ sender:UIPanGestureRecognizer)
-    {
-        self.view.bringSubview(toFront: parkHereImage)
-        let translation = sender.translation(in: self.view)
-        parkHereImage.center = CGPoint(x: parkHereImage.center.x + translation.x, y: parkHereImage.center.y + translation.y)
-        sender.setTranslation(CGPoint.zero, in: self.view)
-        
-        let point = sender.location(in: self.mapView)
-        parkCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
-        
-    }
-    func draggedRigView(_ sender:UIPanGestureRecognizer)
-    {
-        self.view.bringSubview(toFront: rigHereImage)
-        let translation = sender.translation(in: self.view)
-        rigHereImage.center = CGPoint(x: rigHereImage.center.x + translation.x, y: rigHereImage.center.y + translation.y)
-        sender.setTranslation(CGPoint.zero, in: self.view)
-        
-        let point = sender.location(in: self.mapView)
-        rigCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
-    }
-    func draggedLaunchView(_ sender:UIPanGestureRecognizer)
-    {
-        self.view.bringSubview(toFront: launchHereImage)
-        let translation = sender.translation(in: self.view)
-        launchHereImage.center = CGPoint(x: launchHereImage.center.x + translation.x, y: launchHereImage.center.y + translation.y)
-        sender.setTranslation(CGPoint.zero, in: self.view)
-        
-        let point = sender.location(in: self.mapView)
-        launchCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
-    }
-    func draggedWaterStartView(_ sender:UIPanGestureRecognizer)
-    {
-        self.view.bringSubview(toFront: waterStartHereImage)
-        let translation = sender.translation(in: self.view)
-        waterStartHereImage.center = CGPoint(x: waterStartHereImage.center.x + translation.x, y: waterStartHereImage.center.y + translation.y)
-        sender.setTranslation(CGPoint.zero, in: self.view)
-        
-        let point = sender.location(in: self.mapView)
-        waterStartCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
-    }
     
-    func saveLocations()
-    {
-        let parkAnnot = MKPointAnnotation()
-        parkAnnot.coordinate = parkCoordinates
-        parkAnnot.title = "park here"
-        mapView.addAnnotation(parkAnnot)
-        
-        let rigAnnot = MKPointAnnotation()
-        rigAnnot.coordinate = rigCoordinates
-        rigAnnot.title = "rig here"
-        mapView.addAnnotation(rigAnnot)
-        
-        let launchAnnot = MKPointAnnotation()
-        launchAnnot.coordinate = launchCoordinates
-        launchAnnot.title = "launch here"
-        mapView.addAnnotation(launchAnnot)
-        
-        let waterStartAnnot = MKPointAnnotation()
-        waterStartAnnot.coordinate = waterStartCoordinates
-        waterStartAnnot.title = "water start here"
-        mapView.addAnnotation(waterStartAnnot)
-        
-        parkHereImage.alpha = 0
-        rigHereImage.alpha = 0
-        launchHereImage.alpha = 0
-        waterStartHereImage.alpha = 0
-    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
+}
+extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
+{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 6
     }
-    */
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch(indexPath.section)
+        {
+        case spotNameSection:
+            return makeSpotNameCell(tableView: tableView, cellForRowAt: indexPath)
+        case spotLocationsSection:
+            return makeSpotLocationsCell(tableView: tableView, cellForRowAt: indexPath)
+        case difficultySection:
+            return makeDifficultyCell(tableView: tableView, cellForRowAt: indexPath)
+        case windDirectionSection:
+            return makeWindDirectionsCell(tableView: tableView, cellForRowAt: indexPath)
+        case submitSection:
+            return makeSubmitCell(tableView: tableView, cellForRowAt: indexPath)
+        case seasonSection:
+            return makeSeasonCell(tableView: tableView, cellForRowAt: indexPath)
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Shouldn't happen"
+            return cell
+        }
+        
+    }
+    
+    func makeSubmitCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+        cell.title.text = "Submit"
 
+        cell.backgroundColor = UIColor.blue
+        return cell
+    }
+    func makeDifficultyCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(difficultyState)
+        {
+        case "max":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "difficultyCell", for: indexPath) as! difficultyTableViewCell
+            cell.backgroundColor = UIColor.white
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Difficulty"
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
+    func makeSeasonCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(seasonState)
+        {
+        case "max":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "seasonCell", for: indexPath) as! seasonTableViewCell
+            cell.backgroundColor = UIColor.white
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Season"
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
+    func makeWindDirectionsCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(windDirectionState)
+        {
+        case "max":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "windDirectionsCell", for: indexPath) as! windDirectionsTableViewCell
+            cell.backgroundColor = UIColor.white
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Wind directions"
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
+    func makeSpotLocationsCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(spotLocationPickerState)
+        {
+        case "max":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "spotLocationCell", for: indexPath) as! spotLocationPickerTableViewCell
+            cell.backgroundColor = UIColor.white
+            
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Spot Locations"
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
+    
+    func makeSpotNameCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(spotNameState)
+        {
+        case "max":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "spotNameCell", for: indexPath) as! spotNameTableViewCell
+            cell.spotNameTextField.delegate = self
+            cell.backgroundColor = UIColor.white
+            return cell
+        case "picked":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Spot Name: \(theSpot.title)"
+            cell.backgroundColor = UIColor.white
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Spot Name"
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch(indexPath.section)
+        {
+        case spotNameSection:
+            switch(spotNameState)
+            {
+            case "max":
+                return 100
+            default:
+                return 50
+            }
+            
+        case spotLocationsSection:
+            switch(spotLocationPickerState)
+            {
+            case "max":
+                return self.view.frame.height
+            default:
+                return 50
+            }
+        case difficultySection:
+            switch(difficultyState)
+            {
+            case "max":
+                return 150
+            default:
+                return 50
+            }
+        case windDirectionSection:
+            switch(windDirectionState)
+            {
+            case "max":
+                return 150
+            default:
+                return 50
+            }
+        case seasonSection:
+            switch(seasonState)
+            {
+            case "max":
+                return 150
+            default:
+                return 50
+            }
+        default:
+            return 100
+        }
+        
+        
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch(indexPath.section)
+        {
+        case spotNameSection:
+            switch(spotNameState)
+            {
+            case "max":
+                spotNameState = "picked"
+                break
+            default:
+                spotNameState = "max"
+            }
+            break
+        case spotLocationsSection:
+            switch(spotLocationPickerState)
+            {
+            case "max":
+                spotLocationPickerState = "min"
+                break
+            default:
+                spotLocationPickerState = "max"
+            }
+            break
+        case difficultySection:
+            switch(difficultyState)
+            {
+            case "max":
+                difficultyState = "min"
+                break
+            default:
+                difficultyState = "max"
+            }
+            break
+        case windDirectionSection:
+            switch(windDirectionState)
+            {
+            case "max":
+                windDirectionState = "min"
+                break
+            default:
+                windDirectionState = "max"
+            }
+            break
+        case seasonSection:
+            switch(seasonState)
+            {
+            case "max":
+                seasonState = "min"
+                break
+            default:
+                seasonState = "max"
+            }
+            break
+        case submitSection:
+            switch(submitState)
+            {
+            case "unpicked":
+                DBUpload.createSpot(theSpot.makeDBSpot())
+                //do something with "theSpot"
+            default:
+                break
+            }
+            break
+        default:
+            break
+        }
+        tableView.reloadData()
+    }
+    
+}
+extension createSpotViewController: UITextFieldDelegate
+{
+    func textFieldDidChange(_ textField: UITextField) {
+        theSpot.title = textField.text!
+    }
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        theSpot.title = textField.text!
+    }
 }

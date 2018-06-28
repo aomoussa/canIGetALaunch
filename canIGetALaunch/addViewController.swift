@@ -16,16 +16,17 @@ class addViewController: UIViewController {
     var dateSectionNum = 1
     var windSpeedSectionNum = 2
     var gearSectionNum = 3
-    var submitSectionNum = 4
+    var trackerSectionNum = 4
+    var submitSectionNum = 5
     
     var pickSpotState = "min"//"max"
     var pickedSpot = spot()
     
-    var currSesh = session()
     var dateState = "min"//"max"
     var windSpeedStuff = windSpeed()
     var gearStuff = gear()
     var submitState = "untapped"//tapped
+    var trackerState = "max"//"in progress"
     
     
     override func viewDidLoad() {
@@ -34,19 +35,20 @@ class addViewController: UIViewController {
         seshDetailsTableView.dataSource = self
     }
     override func viewWillAppear(_ animated: Bool) {
-        currSesh = session()
         submitState = "untapped"
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        //let defaults = UserDefaults.standard
+        //defaults.set((thisSession as String), forKey: "sessions")
         // Dispose of any resources that can be recreated.
     }
     
 }
 extension addViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section)
@@ -87,12 +89,11 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             return makeGearPickerCell(tableView: tableView, indexPath: indexPath)
         case submitSectionNum:
             return makeSubmitCell(tableView: tableView, indexPath: indexPath)
+        case trackerSectionNum:
+            return makeTrackerCell(tableView: tableView, indexPath: indexPath)
         default:
             return UITableViewCell()
         }
-        
-        
-        
     }
     func makeSubmitCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
@@ -102,7 +103,22 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
         return cell
     
     }
-    
+    func makeTrackerCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(trackerState)
+        {
+        case "min":
+            let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
+            cell.title.text = "Tracking Session"
+            cell.backgroundColor = UIColor.white
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "trackerCell")! as! sessionTrackerTableViewCell
+            //cell.trackerMap.delegate = self
+            cell.backgroundColor = UIColor.white
+            return cell
+        }
+    }
     func makeDatePickerCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         switch(dateState)
@@ -114,7 +130,7 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             return cell
         case "picked":
             let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
-            cell.title.text = "Picked Date: \(currSesh.date)"
+            cell.title.text = "Picked Date: \(theSesh.date)"
             cell.backgroundColor = UIColor.white
             return cell
         default:
@@ -126,7 +142,7 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
     }
     func dateChanged(_ Sender: UIDatePicker)
     {
-        currSesh.date = Sender.date as NSDate
+        theSesh.date = Sender.date as NSDate
     }
     func makeSpotPickerCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
@@ -281,6 +297,16 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
                 gearStuff.pickerState = "max"
             }
             break
+        case trackerSectionNum:
+            switch(trackerState)
+            {
+            case "min":
+                trackerState = "max"
+                break
+            default:
+                trackerState = "min"
+            }
+            break
         case submitSectionNum:
             switch(submitState)
             {
@@ -288,11 +314,16 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
                 break
             default:
                 submitState = "tapped"
-                currSesh.seshGear = gearStuff
-                currSesh.seshSpot = pickedSpot
-                currSesh.seshWindSpeed = windSpeedStuff
-                currSesh.active = true
-                allSessions.append(currSesh)
+                theSesh.seshGear = gearStuff
+                theSesh.seshSpot = pickedSpot
+                theSesh.seshWindSpeed = windSpeedStuff
+                theSesh.active = true
+                allSessions.append(theSesh)
+                let dbGear = theSesh.seshGear.makeDBGear()
+                let dbWind = theSesh.seshWindSpeed.makeDBWind()
+                DBUpload.createGear(dbGear)
+                DBUpload.createWind(dbWind)
+                DBUpload.createSesh(theSesh.makeDBSession(fromGear: dbGear, fromWindSpeed: dbWind))
                 tabBarController?.selectedIndex = 0
             }
             
@@ -324,6 +355,14 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             }
         case gearSectionNum:
             switch(gearStuff.pickerState)
+            {
+            case "max":
+                return 400
+            default:
+                return 50
+            }
+        case trackerSectionNum:
+            switch(trackerState)
             {
             case "max":
                 return 400
