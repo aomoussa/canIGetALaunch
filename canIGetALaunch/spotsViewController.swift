@@ -24,7 +24,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
     
     var selectedSpot = spot()
     var state = "allSpots"//"oneSpot"
-    
+    var kiterBitmojiImage = UIImage(named: "launch.jpg")
     
     
     
@@ -38,7 +38,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         switch(state)
         {
         case "oneSpot":
-            spotTitle.text = "selected spot: \(selectedSpot.title)"
+            spotTitle.text = "\(selectedSpot.title)"
             backButton.alpha = 1
             self.displaySpot(spot: selectedSpot)
         default:
@@ -48,7 +48,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
             {
                 populateSpots()
             }
-            else if(annots.count == 0)
+            else if(annots.count < 2)
             {
                 for spot in allSpots
                 {
@@ -61,6 +61,12 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     self.annots.append(annot)
                 }
                 
+            }
+            else{
+                for annot in annots
+                {
+                    self.mapView.addAnnotation(annot)
+                }
             }
             mapView.showAnnotations(self.mapView.annotations, animated: true)
             //
@@ -103,34 +109,34 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         DBDownload.querySpots(completionHandler: completionHandler)
     }
     /*
-    func populateSessions()
-    {
-        let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
-            if error != nil {
-                print("The request failed. Error: \(String(describing: error))")
-            }
-            if output != nil {
-                for dsesh in output!.items {
-                    let sessionItem = dsesh as? Session
-                    print("\(sessionItem!._spotTitle!)")
-                    let normalSesh = session(fromSession: sessionItem!)
-                    allSpots.append(normalSpot)
-                    let annot = MKPointAnnotation()
-                    annot.coordinate = normalSpot.parkHere
-                    annot.title = normalSpot.title
-                    self.mapView.addAnnotation(annot)
-                    //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
-                    self.annots.append(annot)
-                    
-                }
-                
-                
-                self.mapView.showAnnotations(self.mapView.annotations, animated: true)
-            }
-        }
-        DBDownload.querySessions(completionHandler: completionHandler)
-
-    }*/
+     func populateSessions()
+     {
+     let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
+     if error != nil {
+     print("The request failed. Error: \(String(describing: error))")
+     }
+     if output != nil {
+     for dsesh in output!.items {
+     let sessionItem = dsesh as? Session
+     print("\(sessionItem!._spotTitle!)")
+     let normalSesh = session(fromSession: sessionItem!)
+     allSpots.append(normalSpot)
+     let annot = MKPointAnnotation()
+     annot.coordinate = normalSpot.parkHere
+     annot.title = normalSpot.title
+     self.mapView.addAnnotation(annot)
+     //annot.setValue(annots.count, forKeyPath: "index")  //(value: annots.count, forUndefinedKey: "index")
+     self.annots.append(annot)
+     
+     }
+     
+     
+     self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+     }
+     }
+     DBDownload.querySessions(completionHandler: completionHandler)
+     
+     }*/
     
     @IBOutlet weak var mapView: MKMapView!
     override func viewDidLoad() {
@@ -155,26 +161,36 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-        mapView.removeAnnotations(mapView.annotations)
+        //mapView.removeAnnotations(mapView.annotations)
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-
+        
         switch(state)
         {
         case "oneSpot":
             break
         default:
-            if let annot  = view.annotation 
-
+            if let annot  = view.annotation
+                
             {
-            let i = annots.index(of: annot as! MKPointAnnotation)  //(where: {$0.equals(annot)})
-            print(i ?? 0)
-            selectedSpot = allSpots[i! - 1]
-                switchSpotState(to: "oneSpot")
+                if let foundSpot = allSpots.enumerated().first(where: {$0.element.parkHere.latitude == annot.coordinate.latitude})
+                {
+                    selectedSpot = foundSpot.element
+                    switchSpotState(to: "oneSpot")
+                }
+                else{
+                    print("couldn't find spot")
+                }
+                /*
+                 let i = annots.index(of: annot as! MKPointAnnotation)  //(where: {$0.equals(annot)})
+                 print(i ?? 0)
+                 selectedSpot = allSpots[i! - 1]
+                 switchSpotState(to: "oneSpot")*/
             }
         }
         
     }
+    
     func displaySpot(spot: spot)
     {
         let parkHere = MKPointAnnotation()
@@ -207,10 +223,79 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         self.mapView.addAnnotation(launchHere)
         self.mapView.addAnnotation(waterStartHere)
         
+        for wd in spot.windDirections
+        {
+            let windAnnot = MKPointAnnotation()
+            windAnnot.title = "good wind direction"
+            switch(wd)
+            {
+            case "n": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude + 0.014
+                windAnnot.coordinate.longitude = spot.launchHere.longitude
+                break
+            case "ne": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude + 0.01
+                windAnnot.coordinate.longitude = spot.launchHere.longitude + 0.01
+                break
+            case "e": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude
+                windAnnot.coordinate.longitude = spot.launchHere.longitude + 0.014
+                break
+            case "se": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude - 0.01
+                windAnnot.coordinate.longitude = spot.launchHere.longitude + 0.01
+                break
+            case "s": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude - 0.014
+                windAnnot.coordinate.longitude = spot.launchHere.longitude
+                break
+            case "sw": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude - 0.01
+                windAnnot.coordinate.longitude = spot.launchHere.longitude - 0.01
+                break
+            case "w": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude
+                windAnnot.coordinate.longitude = spot.launchHere.longitude  - 0.014
+                break
+            case "nw": 
+                windAnnot.coordinate.latitude = spot.launchHere.latitude + 0.01
+                windAnnot.coordinate.longitude = spot.launchHere.longitude - 0.01
+                break
+            default:
+                break
+            }
+            self.mapView.addAnnotation(windAnnot)
+        }
         let annotationsToShow = mapView.annotations.filter { $0 !== mapView.userLocation }
         self.mapView.showAnnotations(annotationsToShow, animated: true)
         //self.mapView.reloadInputViews()
         
+    }
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+    func makeImageViewAndCircle(image: UIImage) -> UIImageView
+    {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        imageView.image = image
+        circleImageView(image: imageView)
+        return imageView
+    }
+    func circleImageView(image: UIImageView)
+    {
+        image.layer.borderWidth = 1
+        image.layer.masksToBounds = false
+        image.layer.borderColor = UIColor.black.cgColor
+        image.layer.cornerRadius = image.frame.width/1.9
+        image.clipsToBounds = true
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if !(annotation is MKPointAnnotation) {
@@ -222,27 +307,30 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
         var anView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
         if anView == nil {
             anView = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            
+            var image = UIImage(named: "launch.png")
             if((annotation.title!) != nil){
                 switch((annotation.title!)!)
                 {
                 case "park here":
-                    anView?.image = UIImage(named:"park.png")
+                    image = UIImage(named:"park.png")
                     break
                 case "rig here":
-                    anView?.image = UIImage(named:"airpump.png")
+                    image = UIImage(named:"airpump.png")
                     break
                 case "launch here":
-                    anView?.image = UIImage(named:"launch.png")
+                    image = UIImage(named:"launch.png")
                     break
                 case "water start":
-                    anView?.image = UIImage(named:"waterStart.png")
+                    image = UIImage(named:"waterStart.png")
+                    break
+                case "good wind direction":
+                    image = UIImage(named: "wind.png")
                     break
                 case "your location":
-                    anView?.image = thisKiter.imageFromBitmoji()
+                    image = resizeImage(image: thisKiter.image, newWidth: 50)
                     break
                 default:
-                    anView?.image = thisKiter.imageFromBitmoji()
+                    image = resizeImage(image: thisKiter.image, newWidth: 50)
                 }
                 
                 
@@ -250,36 +338,43 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     
                     if(sesh.seshSpot.title == (annotation.title!)!)
                     {
-                        anView?.image = thisKiter.imageFromBitmoji()//UIImage(named: "second.jpg")
+                        image = thisKiter.imageFromBitmoji()//UIImage(named: "second.jpg")
                     }
-                    
                 }
+                let imageView = makeImageViewAndCircle(image: image!)
+                anView?.addSubview(imageView)
+                anView?.frame = imageView.frame
             }
             anView?.canShowCallout = true
         }
+            
         else {
+            var image = UIImage(named: "launch.png")
             if let title = annotation.title!
             {
                 
                 switch(title)
                 {
                 case "park here":
-                    anView?.image = UIImage(named:"park.png")
+                    image = UIImage(named:"park.png")
                     break
                 case "rig here":
-                    anView?.image = UIImage(named:"airpump.png")
+                    image = UIImage(named:"airpump.png")
                     break
                 case "launch here":
-                    anView?.image = UIImage(named:"launch.png")
+                    image = UIImage(named:"launch.png")
                     break
                 case "water start":
-                    anView?.image = UIImage(named:"waterStart.png")
+                    image = UIImage(named:"waterStart.png")
+                    break
+                case "good wind direction":
+                    image = UIImage(named: "wind.png")
                     break
                 case "your location":
-                    anView?.image = thisKiter.imageFromBitmoji()
+                    image = resizeImage(image: thisKiter.image, newWidth: 50)
                     break
                 default:
-                    anView?.image = thisKiter.imageFromBitmoji()
+                    image = resizeImage(image: thisKiter.image, newWidth: 50)
                 }
                 anView?.annotation = annotation
             }
@@ -290,10 +385,17 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                 
                 if(sesh.seshSpot.title == title)
                 {
-                    anView?.image = thisKiter.imageFromBitmoji()
+                    image = resizeImage(image: thisKiter.image, newWidth: 50)
                 }
                 
             }
+            for view in (anView?.subviews)!
+            {
+                view.removeFromSuperview()
+            }
+            let imageView = makeImageViewAndCircle(image: image!)
+            anView?.addSubview(imageView)
+            anView?.frame = imageView.frame
         }
         
         return anView

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,28 +23,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wq4-xD-cIL">
-                                <rect key="frame" x="37.5" y="100" width="300" height="200"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="The kiter project, for kiters by kiters, because we deserve, better than a forum, an actual platform">
-                                        <attributes>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The kiter project, for kiters by kiters, because we deserve, better than a forum, an actual platform" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wq4-xD-cIL">
+                                <rect key="frame" x="37.5" y="33.5" width="300" height="200"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="waterStart" translatesAutoresizingMaskIntoConstraints="NO" id="dtr-kC-W8x">
-                                <rect key="frame" x="67" y="383" width="240" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wind" translatesAutoresizingMaskIntoConstraints="NO" id="dtr-kC-W8x">
+                                <rect key="frame" x="56" y="269" width="262.5" height="262.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="dtr-kC-W8x" secondAttribute="height" multiplier="1:1" id="b65-Hz-eBj"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.2218278484" blue="0.411978438" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="dtr-kC-W8x" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="1.2" id="829-Qf-ema"/>
+                            <constraint firstItem="dtr-kC-W8x" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.7" id="MUR-5o-pwu"/>
+                            <constraint firstItem="dtr-kC-W8x" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Yli-Sa-kMq"/>
                             <constraint firstItem="wq4-xD-cIL" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="f5X-YW-WBX"/>
-                            <constraint firstItem="wq4-xD-cIL" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.6" id="fxT-pN-tnQ"/>
+                            <constraint firstItem="wq4-xD-cIL" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="0.4" id="fxT-pN-tnQ"/>
                             <constraint firstItem="wq4-xD-cIL" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.8" id="oG2-tU-rcX"/>
                             <constraint firstItem="wq4-xD-cIL" firstAttribute="height" secondItem="Ze5-6b-2t3" secondAttribute="height" multiplier="0.3" id="z8x-UM-shP"/>
                         </constraints>
@@ -55,6 +55,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="waterStart" width="16" height="16"/>
+        <image name="wind" width="128" height="128"/>
     </resources>
 </document>

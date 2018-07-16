@@ -287,7 +287,19 @@ extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
             switch(submitState)
             {
             case "unpicked":
-                DBUpload.createSpot(theSpot.makeDBSpot())
+                
+                DBUpload.createSpot(theSpot.makeDBSpot(), completionHandler: {
+                    (error: Error?) -> Void in
+                    
+                    if let error = error {
+                        print("Amazon DynamoDB Save Error: \(error)")
+                        return
+                    }
+                    self.tabBarController?.selectedIndex = 0
+                    self.performSegue(withIdentifier: "toSpots", sender: self)
+                    print("An item was saved.")
+                })
+                allSpots.append(theSpot)
                 //do something with "theSpot"
             default:
                 break

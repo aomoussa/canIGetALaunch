@@ -40,12 +40,21 @@ extension sessionDisplayCollectionTableViewCell: UICollectionViewDelegate, UICol
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let collCell = collectionView.dequeueReusableCell(withReuseIdentifier: "sessionMapCollCell", for: indexPath) as! sessionMapCollectionViewCell
-        collCell.locations = self.locations
-        return collCell
+        switch(indexPath.row)
+        {
+        case 0:
+            let collCell = collectionView.dequeueReusableCell(withReuseIdentifier: "sessionMapCollCell", for: indexPath) as! sessionMapCollectionViewCell
+            collCell.locations = self.locations
+            return collCell
+        default:
+            let collCell = collectionView.dequeueReusableCell(withReuseIdentifier: "sessionDataTable", for: indexPath) as! sessionDataTableCollectionViewCell
+            collCell.locations = self.locations
+            return collCell
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -59,11 +68,21 @@ extension sessionDisplayCollectionTableViewCell: UICollectionViewDelegate, UICol
             {
                 c.makeLine()
             }
-            
+        }
+        if let c = cell as? sessionDataTableCollectionViewCell
+        {
+            if(c.locations.count == 0 && locations.count > 0)
+            {
+                c.locations = locations
+            }
+            if(c.locations.count > 0 && !c.lineDisplayed)
+            {
+                c.makeTable()
+            }
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.frame.width, height: self.frame.width)
+        return CGSize(width: self.frame.width*0.95, height: self.frame.width*0.95)
     }
     
 }

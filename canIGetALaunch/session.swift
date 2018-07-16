@@ -54,6 +54,12 @@ class session
             locations.append(CLLocation(coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(loc._lat!), longitude: CLLocationDegrees(loc._lon!)), altitude: CLLocationDistance(loc._altitude!), horizontalAccuracy: CLLocationAccuracy(), verticalAccuracy: CLLocationAccuracy(), course: CLLocationDirection(loc._course!), speed: CLLocationSpeed(loc._speed!), timestamp: NSDate(timeIntervalSince1970: TimeInterval(loc._timestamp!)) as Date))
         }
     }
+    func getFormattedDate() -> String
+    {
+        let dateFormat = DateFormatter()
+        dateFormat.dateStyle = .full
+        return dateFormat.string(from: self.date as Date)
+    }
     func makeDBSession(fromGear: Gear, fromWindSpeed: Wind) -> Session
     {
         let dbSesh = Session()
@@ -81,20 +87,23 @@ class session
     }
     func makeDPAndSave(loc: CLLocation)
     {
-        locations.append(loc)
-        
-        let locDP = LocationDataPoint()
-        locDP?._iD = NSUUID().uuidString
-        locDP?._sessionId = self.id
-        locDP?._lat = NSNumber(value: loc.coordinate.latitude)
-        locDP?._lon = NSNumber(value: loc.coordinate.longitude)
-        locDP?._speed = NSNumber(value: loc.speed)
-        locDP?._course = NSNumber(value: loc.course)
-        locDP?._altitude = NSNumber(value: loc.altitude)
-        locDP?._timestamp = NSNumber(value: loc.timestamp.timeIntervalSince1970)
-        locDPs.append(locDP!)
-        
-        DBUpload.createLocDP(locDP!)
+        if(active)
+        {
+            locations.append(loc)
+            
+            let locDP = LocationDataPoint()
+            locDP?._iD = NSUUID().uuidString
+            locDP?._sessionId = self.id
+            locDP?._lat = NSNumber(value: loc.coordinate.latitude)
+            locDP?._lon = NSNumber(value: loc.coordinate.longitude)
+            locDP?._speed = NSNumber(value: loc.speed)
+            locDP?._course = NSNumber(value: loc.course)
+            locDP?._altitude = NSNumber(value: loc.altitude)
+            locDP?._timestamp = NSNumber(value: loc.timestamp.timeIntervalSince1970)
+            locDPs.append(locDP!)
+            
+            DBUpload.createLocDP(locDP!)
+        }
     }
 }
 var allSessions = [session]()

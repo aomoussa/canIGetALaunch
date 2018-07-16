@@ -39,7 +39,7 @@ class gear
     }
     func toString() -> String
     {
-        return "\(boardType) + \(kiteType)"
+        return "\(boardSize)cm \(boardBrand) \(boardType) board + \(kiteSize)m \(kiteBrand) \(kiteType) kite"
     }
     func makeDBGear() -> Gear{
         let dbgear = Gear()

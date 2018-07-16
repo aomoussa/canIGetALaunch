@@ -41,7 +41,7 @@ class newsFeedViewController: UIViewController {
                     let sessionItem = dSesh as? Session
                     print("\(sessionItem!._spotTitle!)")
                     let normalSession = session(fromDBSession: sessionItem!)
-                    
+                    //allSessions.append(normalSession)
                     self.getGearWithID(id: (normalSession.dbSesh?._gearID)!, forSesh: normalSession)
                 }
             }
@@ -99,7 +99,7 @@ class newsFeedViewController: UIViewController {
             if output != nil {
                 for dLoc in output!.items {
                     let locItem = dLoc as? LocationDataPoint
-                    print("\(locItem!._timestamp!)")
+                    print("\(locItem!._sessionId!)")
                     forSesh.addLoc(dbLocDP: locItem!)
                 }
                 cell.locations = forSesh.locations
@@ -122,11 +122,13 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayControllerCell", for: indexPath) as! sessionDisplayCollectionTableViewCell
         cell.gearLabel.text = allSessions[indexPath.row].seshGear.toString()
+        cell.gearLabel.adjustsFontSizeToFitWidth = true
         cell.kiterNameLabel.text = "Ahmed Moussa"
+        cell.kiterImage = roundPic(image: thisKiter.image, picView: cell.kiterImage)
         cell.spotTitleLabel.text = allSessions[indexPath.row].seshSpot.title
         cell.windLabel.text = allSessions[indexPath.row].seshWindSpeed.toString()
-        cell.dateLabel.text = allSessions[indexPath.row].date.description
-        
+        cell.dateLabel.text = allSessions[indexPath.row].getFormattedDate()
+        cell.locations = allSessions[indexPath.row].locations
         return cell
         /*let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayCell", for: indexPath) as! sessionDisplayTableViewCell
          cell.gear.text = allSessions[indexPath.row].seshGear.toString()
@@ -137,13 +139,26 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
          
          return cell*/
     }
+    func roundPic(image: UIImage, picView: UIImageView) -> UIImageView
+    {
+        picView.image = image
+        picView.layer.borderWidth = 1
+        picView.layer.masksToBounds = false
+        picView.layer.borderColor = UIColor(colorLiteralRed: 1, green: 57/255, blue: 105/255, alpha: 1).cgColor
+        picView.layer.cornerRadius = picView.frame.width/1.9
+        picView.clipsToBounds = true
+        return picView
+    }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if let c = cell as? sessionDisplayCollectionTableViewCell
         {
-            if(c.locations.count == 0)
+            if(allSessions[indexPath.row].locations.count == 0)
             {
                 self.getLocDPs(forSesh: allSessions[indexPath.row], cell: c)
+            }
+            else{
+                c.locations = allSessions[indexPath.row].locations
             }
         }
     }
@@ -151,15 +166,15 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         switch(indexPath.row)
         {
         case selectedSessionIndex:
-            return self.view.frame.height
+            return self.view.frame.width*1.2
         default:
-            return 300
+            return self.view.frame.width*1.2
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedSessionIndex = indexPath.row
-        //self.performSegue(withIdentifier: "showSessionDetails", sender: allSessions[indexPath.row])
-        return
+        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        
     }
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

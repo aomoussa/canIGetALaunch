@@ -11,34 +11,18 @@ import AWSDynamoDB
 
 class DBUploadHandler
 {
-    func createSpot(_ spot: Spot) {
+    func createSpot(_ spot: Spot, completionHandler: @escaping (_ error: Error?) -> Void) {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
         
 
         
         //Save a new item
-        dynamoDbObjectMapper.save(spot, completionHandler: {
-            (error: Error?) -> Void in
-            
-            if let error = error {
-                print("Amazon DynamoDB Save Error: \(error)")
-                return
-            }
-            print("An item was saved.")
-        })
+        dynamoDbObjectMapper.save(spot, completionHandler: completionHandler)
     }
-    func createSesh(_ sesh: Session) {
+    func createSesh(_ sesh: Session, completionHandler: @escaping (_ error: Error?) -> Void) {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
 
-        dynamoDbObjectMapper.save(sesh, completionHandler: {
-            (error: Error?) -> Void in
-            
-            if let error = error {
-                print("Amazon DynamoDB Save Error: \(error)")
-                return
-            }
-            print("An item was saved.")
-        })
+        dynamoDbObjectMapper.save(sesh, completionHandler: completionHandler)
     }
     func createLocDP(_ locDP: LocationDataPoint)
     {
@@ -54,31 +38,15 @@ class DBUploadHandler
             print("An item was saved.")
         })
     }
-    func createGear(_ gear: Gear) {
+    func createGear(_ gear: Gear, completionHandler: @escaping (_ error: Error?) -> Void) {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
 
-        dynamoDbObjectMapper.save(gear, completionHandler: {
-            (error: Error?) -> Void in
-            
-            if let error = error {
-                print("Amazon DynamoDB Save Error: \(error)")
-                return
-            }
-            print("An item was saved.")
-        })
+        dynamoDbObjectMapper.save(gear, completionHandler: completionHandler)
     }
-    func createWind(_ wind: Wind) {
+    func createWind(_ wind: Wind, completionHandler: @escaping (_ error: Error?) -> Void) {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
 
-        dynamoDbObjectMapper.save(wind, completionHandler: {
-            (error: Error?) -> Void in
-            
-            if let error = error {
-                print("Amazon DynamoDB Save Error: \(error)")
-                return
-            }
-            print("An item was saved.")
-        })
+        dynamoDbObjectMapper.save(wind, completionHandler: completionHandler)
     }
 }
 

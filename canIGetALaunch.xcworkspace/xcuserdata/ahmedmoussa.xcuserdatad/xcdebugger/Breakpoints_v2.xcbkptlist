@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "canIGetALaunch/kiter.swift"
-            timestampString = "551554410.761096"
+            filePath = "canIGetALaunch/addViewController.swift"
+            timestampString = "553120691.93194"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "imageFromBitmoji()"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
+            landmarkName = "makeTrackerCell(tableView:indexPath:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "canIGetALaunch/kiter.swift"
-            timestampString = "551554413.2748719"
+            filePath = "canIGetALaunch/addViewController.swift"
+            timestampString = "553120694.597737"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "imageFromBitmoji()"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "makeTrackerCell(tableView:indexPath:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,13 +42,61 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "canIGetALaunch/newsFeedViewController.swift"
-            timestampString = "551902235.9180959"
+            timestampString = "553464046.8502769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "168"
-            endingLineNumber = "168"
-            landmarkName = "newsFeedViewController"
-            landmarkType = "4">
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "tableView(_:willDisplay:forRowAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "canIGetALaunch.newsFeedViewController.tableView (__ObjC.UITableView, willDisplay : __ObjC.UITableViewCell, forRowAt : Foundation.IndexPath) -&gt; ()"
+                  moduleName = "canIGetALaunch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ahmedmoussa/Desktop/canIGetALaunch/canIGetALaunch/newsFeedViewController.swift"
+                  timestampString = "553464047.210377"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "154"
+                  endingLineNumber = "154"
+                  offsetFromSymbolStart = "27">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "canIGetALaunch.newsFeedViewController.tableView (__ObjC.UITableView, willDisplay : __ObjC.UITableViewCell, forRowAt : Foundation.IndexPath) -&gt; ()"
+                  moduleName = "canIGetALaunch"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ahmedmoussa/Desktop/canIGetALaunch/canIGetALaunch/newsFeedViewController.swift"
+                  timestampString = "553464047.216117"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "154"
+                  endingLineNumber = "154"
+                  offsetFromSymbolStart = "150">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "canIGetALaunch/newsFeedViewController.swift"
+            timestampString = "553464092.0283771"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "getWindWithID(id:forSesh:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -66,6 +66,29 @@ class DBDownloadHandler
             })
         })
     }
+    func queryLocDPsFromSessionWithIDAndMinSpeed(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        // 1) Configure the query
+        let minSpeed = 5
+        let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.filterExpression = "#sessionId = :id AND #speed > :minSpeed"
+        scanExpression.expressionAttributeNames = [
+            "#sessionId": "sessionId",
+            "#speed": "speed"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":id": id,
+            ":minSpeed": minSpeed
+        ]
+        
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        
+        dynamoDbObjectMapper.scan(LocationDataPoint.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
     func queryLocDPsFromSessionWithID(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
         // 1) Configure the query
         let scanExpression = AWSDynamoDBScanExpression()
