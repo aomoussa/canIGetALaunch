@@ -11,6 +11,7 @@ import MapKit
 class spot{
     
     var title = "defaultTitle"
+    var spotKiter = kiter()
     
     var parkHere = CLLocationCoordinate2D()
     var rigHere = CLLocationCoordinate2D()
@@ -20,7 +21,7 @@ class spot{
     var windDirections = [String]()
     var season = [String]()
     var difficulties = [String]()
-    
+    var dbSpot = Spot()
     
     init(title: String, parkHere: CLLocationCoordinate2D, rigHere: CLLocationCoordinate2D, launchHere: CLLocationCoordinate2D, waterStartHere: CLLocationCoordinate2D)
     {
@@ -36,6 +37,7 @@ class spot{
     }
     init(fromSpot: Spot)
     {
+        dbSpot = fromSpot
         title = fromSpot._title!
         
         parkHere.latitude = fromSpot._parkHereLat as! CLLocationDegrees
@@ -63,14 +65,13 @@ class spot{
             season.append(s)
         }
         
-        
     }
     func makeDBSpot() -> Spot
     {
         let dbspot = Spot()
         dbspot?._id = NSUUID().uuidString
         dbspot?._title = self.title
-        
+        dbspot?._kiterId = thisKiter.id
         dbspot?._parkHereLat = NSNumber(value: self.parkHere.latitude)
         dbspot?._parkHereLon = NSNumber(value: self.parkHere.longitude)
         dbspot?._rigHereLat = NSNumber(value: self.rigHere.latitude)

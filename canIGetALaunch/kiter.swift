@@ -16,16 +16,39 @@ class kiter
     var bitmoji: NSAttributedString
     var bitmojiLength: Int
     var image: UIImage
+    var id: String
+    var profilePictureUrl: String
     //let textAttachment = NSTextAttachment()
     var sessions = [session]()
+    var dbKiter = Kiter()
     init()
     {
         name = "Ahmed Moussa"
+        id = "1"
         bitmoji = NSAttributedString()
         bitmojiLength = 0
         image = UIImage(named: "launch.png")!
+        profilePictureUrl = "ahmed.com"
     }
-    
+    init(fromDBKiter: Kiter)
+    {
+        dbKiter = fromDBKiter
+        name = fromDBKiter._kiterName!
+        id = fromDBKiter._kiterId!
+        bitmoji = NSAttributedString()
+        bitmojiLength = 0
+        image = UIImage(named: "launch.png")!
+        profilePictureUrl = fromDBKiter._kiterBitmoji!
+        downloadImage(url: URL(string: profilePictureUrl)!)
+    }
+    func createDBKiter() -> Kiter
+    {
+        let dbKiter = Kiter()
+        dbKiter?._kiterBitmoji = profilePictureUrl
+        dbKiter?._kiterId = id
+        dbKiter?._kiterName = name
+        return dbKiter!
+    }
     func downloadImage(url: URL) {
         print("Download Started")
         getDataFromUrl(url: url) { data, response, error in
@@ -55,13 +78,24 @@ class kiter
                 {
                     self.name = userName as String
                 }
-                let facebookID : NSString? = data["id"]! as? NSString
+                if let facebookID = data["id"]! as? NSString
+                {
+                    self.id = facebookID as String
+                }
                 let fbPP:[String:AnyObject] = data["picture"] as! [String : AnyObject]
                 let fbPPData:[String:AnyObject] = fbPP["data"] as! [String : AnyObject]
-                let profilePictureUrl = fbPPData["url"]! as? NSString//"https://graph.facebook.com/\(facebookID)/picture?type=large"
-                let url = URL(string: profilePictureUrl as! String)
+                self.profilePictureUrl = fbPPData["url"]! as? NSString as! String//"https://graph.facebook.com/\(facebookID)/picture?type=large"
+                let url = URL(string: self.profilePictureUrl )
                 self.downloadImage(url: url!)
-                
+                DBUpload.createKiter(self.createDBKiter(), completionHandler: {
+                    (error: Error?) -> Void in
+                    
+                    if let error = error {
+                        print("Amazon DynamoDB Save Error: \(error)")
+                        return
+                    }
+                    print("An item was saved.")
+                })
                 //let firstName : NSString? = data["first_name"]! as? NSString
                 //let lastName : NSString? = data["last_name"]! as? NSString
                 //let email : NSString? = data["email"]! as? NSString

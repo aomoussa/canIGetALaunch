@@ -16,15 +16,28 @@ class sessionMapCollectionViewCell: UICollectionViewCell {
     var allPoints = [CLLocationCoordinate2D]()
     var line = MKPolyline()
     var lineDisplayed = false
+    var cellIndex = 0
     override func awakeFromNib() {
         self.sessionMap.delegate = self
         //makeLine()
     }
     
-    func makeLine()
+    func makeLine(locations: [CLLocation])
     {
+        self.locations = locations
+        allPoints.removeAll()
+        
         if(locations.count > 0)
         {
+            
+            self.sessionMap.removeAnnotations(self.sessionMap.annotations)
+            self.sessionMap.removeOverlays(self.sessionMap.overlays)
+            
+            let seshNum = MKPointAnnotation()
+            seshNum.title = "\(cellIndex)"
+            seshNum.coordinate = locations[0].coordinate
+            self.sessionMap.addAnnotation(seshNum)
+            
             var coordinateArray = [CLLocationCoordinate2D]()
             for loc in locations
             {

@@ -93,6 +93,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     print("\(spotItem!._title!)")
                     let normalSpot = spot(fromSpot: spotItem!)
                     allSpots.append(normalSpot)
+                    self.getKiterWithIdForSpot(id: spotItem!._kiterId ?? thisKiter.id, theSpot: normalSpot)
                     let annot = MKPointAnnotation()
                     annot.coordinate = normalSpot.parkHere
                     annot.title = normalSpot.title
@@ -107,6 +108,26 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
             }
         }
         DBDownload.querySpots(completionHandler: completionHandler)
+    }
+    func getKiterWithIdForSpot(id: String, theSpot: spot)
+    {
+        let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            if error != nil {
+                print("The request failed. Error: \(String(describing: error))")
+            }
+            if output != nil {
+                for dkiter in output!.items {
+                    let kiterItem = dkiter as? Kiter
+                    print("\(kiterItem!._kiterName!)")
+                    let normalKiter = kiter(fromDBKiter: kiterItem!)
+                    theSpot.spotKiter = normalKiter
+                }
+                
+                
+                //keep going
+            }
+        }
+        DBDownload.queryKiterWithID(id: id, completionHandler: completionHandler)
     }
     /*
      func populateSessions()

@@ -75,9 +75,18 @@ class loginViewController: UIViewController {
         circleButton(button: loginButton)
         if((FBSDKAccessToken.current()) != nil)
         {
+            print("should be logged in idu")
             self.performSegue(withIdentifier: "toApp", sender: self)
         }
         // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        if((FBSDKAccessToken.current()) != nil)
+        {
+            print("should be logged in idu")
+            thisKiter.getFBStuff()
+            self.performSegue(withIdentifier: "toApp", sender: self)
+        }
     }
 
     override func didReceiveMemoryWarning() {

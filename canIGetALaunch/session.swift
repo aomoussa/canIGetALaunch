@@ -16,6 +16,7 @@ class session
     var seshSpot: spot
     var seshGear: gear
     var seshWindSpeed: windSpeed
+    var seshKiter: kiter
     var locations = [CLLocation]()
     var dbSesh = Session()
     var locDPs = [LocationDataPoint]()
@@ -28,6 +29,7 @@ class session
         self.seshSpot = spot()
         self.seshGear = gear()
         self.seshWindSpeed = windSpeed()
+        self.seshKiter = kiter()
         
         //locations.append(CLLocation())
     }
@@ -40,15 +42,18 @@ class session
         self.seshSpot.title = fromDBSession._spotTitle!
         self.seshGear = gear()
         self.seshWindSpeed = windSpeed()
+        self.seshKiter = kiter()
     }
     init(fromDBSession: Session, fromSpot: spot, fromGear: gear, fromWind: windSpeed, fromLocDPs: [LocationDataPoint]
         )
     {
+        dbSesh = fromDBSession
         self.id = fromDBSession._sessionID!
         date = NSDate(timeIntervalSince1970: TimeInterval(exactly: Double(fromDBSession._date!)!)!)
         self.seshSpot = fromSpot
         self.seshGear = fromGear
         self.seshWindSpeed = fromWind
+        self.seshKiter = kiter()
         for loc in fromLocDPs
         {
             locations.append(CLLocation(coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(loc._lat!), longitude: CLLocationDegrees(loc._lon!)), altitude: CLLocationDistance(loc._altitude!), horizontalAccuracy: CLLocationAccuracy(), verticalAccuracy: CLLocationAccuracy(), course: CLLocationDirection(loc._course!), speed: CLLocationSpeed(loc._speed!), timestamp: NSDate(timeIntervalSince1970: TimeInterval(loc._timestamp!)) as Date))
@@ -67,8 +72,8 @@ class session
         dbSesh?._date = String(self.date.timeIntervalSince1970)
         dbSesh?._gearID = fromGear._gearId
         dbSesh?._windSpeedID = fromWindSpeed._spotId
-        
-        dbSesh?._spotID = self.seshSpot.title
+        dbSesh?._kiterId = thisKiter.id
+        dbSesh?._spotID = self.seshSpot.dbSpot?._id
         dbSesh?._spotTitle = self.seshSpot.title
         dbSesh?._active = self.active as NSNumber
         

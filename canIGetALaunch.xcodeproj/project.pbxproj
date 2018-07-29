@@ -14,7 +14,9 @@
 		8904A49B20D2D87A0067D328 /* createSpotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8904A49A20D2D87A0067D328 /* createSpotViewController.swift */; };
 		890E0D9E20E554FD002C13DA /* sessionMapCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890E0D9D20E554FD002C13DA /* sessionMapCollectionViewCell.swift */; };
 		893D347520D87E6F005CE4CA /* DBDownloadHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D347420D87E6F005CE4CA /* DBDownloadHandler.swift */; };
+		893E3B74210229B600FC8A58 /* kiterProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */; };
 		8953DBD420F68C03009162D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8953DBD320F68C03009162D0 /* Assets.xcassets */; };
+		8953DBD620FD33B8009162D0 /* mapTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8953DBD520FD33B8009162D0 /* mapTestViewController.swift */; };
 		8954E03320D4D72B0015BB5B /* friendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8954E03220D4D72B0015BB5B /* friendsViewController.swift */; };
 		8961BA7320E1E23600767065 /* sessionDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8961BA7220E1E23600767065 /* sessionDisplayViewController.swift */; };
 		897F745420D5AECA00B9AEE9 /* newsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F745320D5AECA00B9AEE9 /* newsFeedViewController.swift */; };
@@ -59,7 +61,9 @@
 		8904A49A20D2D87A0067D328 /* createSpotViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = createSpotViewController.swift; sourceTree = "<group>"; };
 		890E0D9D20E554FD002C13DA /* sessionMapCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sessionMapCollectionViewCell.swift; sourceTree = "<group>"; };
 		893D347420D87E6F005CE4CA /* DBDownloadHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBDownloadHandler.swift; sourceTree = "<group>"; };
+		893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = kiterProfileTableViewCell.swift; sourceTree = "<group>"; };
 		8953DBD320F68C03009162D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8953DBD520FD33B8009162D0 /* mapTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapTestViewController.swift; sourceTree = "<group>"; };
 		8954E03220D4D72B0015BB5B /* friendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = friendsViewController.swift; sourceTree = "<group>"; };
 		8961BA7220E1E23600767065 /* sessionDisplayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sessionDisplayViewController.swift; sourceTree = "<group>"; };
 		897F745320D5AECA00B9AEE9 /* newsFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newsFeedViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +123,29 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8937ADA82107D9EC008EE79E /* createSpotCells */ = {
+			isa = PBXGroup;
+			children = (
+				89B1671120D44F01008CE98F /* spotNameTableViewCell.swift */,
+				899B7A5820D300F200A3F0EB /* spotLocationPickerTableViewCell.swift */,
+				89E8F2B820D5687E003CA1F1 /* difficultyTableViewCell.swift */,
+				89B1671320D45D23008CE98F /* windDirectionsTableViewCell.swift */,
+				89AF143120D4BA6300B0E1AA /* seasonTableViewCell.swift */,
+			);
+			name = createSpotCells;
+			sourceTree = "<group>";
+		};
+		8937ADA92107DA15008EE79E /* createSessionCells */ = {
+			isa = PBXGroup;
+			children = (
+				8904A49620D1E3350067D328 /* datePickerTableViewCell.swift */,
+				89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */,
+				8904A48E20D193E70067D328 /* gearPickerTableViewCell.swift */,
+				8983538220D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift */,
+			);
+			name = createSessionCells;
+			sourceTree = "<group>";
+		};
 		893D347620D8835C005CE4CA /* DBStuff */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +186,7 @@
 				8904A49A20D2D87A0067D328 /* createSpotViewController.swift */,
 				89ABB4CE20BB38FC00104C1D /* addViewController.swift */,
 				89ABB4D020BB38FC00104C1D /* Main.storyboard */,
+				8953DBD520FD33B8009162D0 /* mapTestViewController.swift */,
 				8953DBD320F68C03009162D0 /* Assets.xcassets */,
 				89F0241220EBF87E0055196E /* loginViewController.swift */,
 				89F19C4120F1416800EB06DD /* FBSDKRequestHandler.swift */,
@@ -175,20 +203,14 @@
 		89B4794A20D17F6100F64CC8 /* cells */ = {
 			isa = PBXGroup;
 			children = (
-				89B1671120D44F01008CE98F /* spotNameTableViewCell.swift */,
-				899B7A5820D300F200A3F0EB /* spotLocationPickerTableViewCell.swift */,
-				89E8F2B820D5687E003CA1F1 /* difficultyTableViewCell.swift */,
-				89B1671320D45D23008CE98F /* windDirectionsTableViewCell.swift */,
-				89AF143120D4BA6300B0E1AA /* seasonTableViewCell.swift */,
-				8904A49620D1E3350067D328 /* datePickerTableViewCell.swift */,
+				8937ADA92107DA15008EE79E /* createSessionCells */,
+				8937ADA82107D9EC008EE79E /* createSpotCells */,
 				89B4794620D17D9500F64CC8 /* justTitleTableViewCell.swift */,
-				89B4794420D1733C00F64CC8 /* windSpeedPickerTableViewCell.swift */,
-				8904A48E20D193E70067D328 /* gearPickerTableViewCell.swift */,
-				8983538220D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift */,
 				89D02B1120DB425D00447DA3 /* sessionDisplayTableViewCell.swift */,
 				89C9DA0620E54E4D0010415C /* sessionDisplayCollectionTableViewCell.swift */,
 				890E0D9D20E554FD002C13DA /* sessionMapCollectionViewCell.swift */,
 				89F0241020EA7F530055196E /* sessionDataTableCollectionViewCell.swift */,
+				893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */,
 			);
 			name = cells;
 			sourceTree = "<group>";
@@ -383,6 +405,7 @@
 				89E8F2B920D5687E003CA1F1 /* difficultyTableViewCell.swift in Sources */,
 				890E0D9E20E554FD002C13DA /* sessionMapCollectionViewCell.swift in Sources */,
 				8961BA7320E1E23600767065 /* sessionDisplayViewController.swift in Sources */,
+				893E3B74210229B600FC8A58 /* kiterProfileTableViewCell.swift in Sources */,
 				89B4794920D17ED300F64CC8 /* windSpeed.swift in Sources */,
 				899B7A5920D300F200A3F0EB /* spotLocationPickerTableViewCell.swift in Sources */,
 				8904A49320D1DDB20067D328 /* session.swift in Sources */,
@@ -400,6 +423,7 @@
 				8904A49B20D2D87A0067D328 /* createSpotViewController.swift in Sources */,
 				897F745420D5AECA00B9AEE9 /* newsFeedViewController.swift in Sources */,
 				89F0241120EA7F530055196E /* sessionDataTableCollectionViewCell.swift in Sources */,
+				8953DBD620FD33B8009162D0 /* mapTestViewController.swift in Sources */,
 				89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */,
 				8904A49720D1E3350067D328 /* datePickerTableViewCell.swift in Sources */,
 				89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */,

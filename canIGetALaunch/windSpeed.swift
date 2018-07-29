@@ -18,6 +18,8 @@ class windSpeed
     var pickerState = "min"//"max"
     let speedUnits = ["knts","mph"]
     
+    var dbWind = Wind()
+    
     init()
     {
         self.id = NSUUID().uuidString
@@ -36,6 +38,7 @@ class windSpeed
     }
     init(fromWind: Wind)
     {
+        self.dbWind = fromWind
         self.id = NSUUID().uuidString
         self.speedFrom = fromWind._speedFrom as! Int
         self.speedTo = fromWind._speedTo as! Int

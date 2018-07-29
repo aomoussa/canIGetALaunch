@@ -19,6 +19,7 @@ class sessionDisplayTableViewCell: UITableViewCell {
     @IBOutlet weak var date: UILabel!
     
     var locations = [CLLocation]()
+    var seshNum = 0
     var allPoints = [CLLocationCoordinate2D]()
     var line = MKPolyline()
     
@@ -44,6 +45,12 @@ class sessionDisplayTableViewCell: UITableViewCell {
     }*/
     func makeLine()
     {
+        let seshNum = MKPointAnnotation()
+        seshNum.title = "\(self.seshNum)"
+        
+        seshNum.coordinate = locations[0].coordinate
+        self.sessionMap.addAnnotation(seshNum)
+        
         var coordinateArray = [CLLocationCoordinate2D]()
         for loc in locations
         {

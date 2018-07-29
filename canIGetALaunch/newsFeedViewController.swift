@@ -13,13 +13,17 @@ import AWSAuthCore
 class newsFeedViewController: UIViewController {
     
     var selectedSessionIndex = 0
+    var numOfSessions = 0
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         // Do any additional setup after loading the view.
-        getSessions()
+        if(allSessions.count == 0)
+        {
+            getSessions()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -38,15 +42,37 @@ class newsFeedViewController: UIViewController {
             }
             if output != nil {
                 for dSesh in output!.items {
+                    self.numOfSessions = self.numOfSessions+1
                     let sessionItem = dSesh as? Session
                     print("\(sessionItem!._spotTitle!)")
                     let normalSession = session(fromDBSession: sessionItem!)
                     //allSessions.append(normalSession)
-                    self.getGearWithID(id: (normalSession.dbSesh?._gearID)!, forSesh: normalSession)
+                    
+                    self.getKiterWithID(id: normalSession.dbSesh?._kiterId ?? thisKiter.id, forSesh: normalSession)
                 }
             }
         }
         DBDownload.querySessions(completionHandler: completionHandler)
+    }
+    func getKiterWithID(id: String, forSesh: session)
+    {
+        let completionHandler = {(output: AWSDynamoDBPaginatedOutput?, error: Error?) in
+            if error != nil {
+                print("The request failed. Error: \(String(describing: error))")
+            }
+            if output != nil {
+                for dkiter in output!.items {
+                    let kiterItem = dkiter as? Kiter
+                    print("\(kiterItem!._kiterName!)")
+                    let normalKiter = kiter(fromDBKiter: kiterItem!)
+                    forSesh.seshKiter = normalKiter
+                }
+                self.getGearWithID(id: (forSesh.dbSesh?._gearID)!, forSesh: forSesh)
+                
+                //keep going
+            }
+        }
+        DBDownload.queryKiterWithID(id: id, completionHandler: completionHandler)
     }
     func getGearWithID(id: String, forSesh: session)
     {
@@ -82,8 +108,11 @@ class newsFeedViewController: UIViewController {
                     forSesh.seshWindSpeed = normalWind
                 }
                 allSessions.append(forSesh)
-                self.tableView.reloadData()
-                
+                allSessions.sort(by: {$0.date.compare($1.date as Date) == ComparisonResult.orderedDescending})
+                if(allSessions.count == self.numOfSessions)
+                {
+                    self.tableView.reloadData()
+                }
                 
                 //keep going
             }
@@ -102,14 +131,16 @@ class newsFeedViewController: UIViewController {
                     print("\(locItem!._sessionId!)")
                     forSesh.addLoc(dbLocDP: locItem!)
                 }
-                cell.locations = forSesh.locations
-                cell.sessionDataCollView.reloadData()
+                DispatchQueue.main.async(execute: {
+                    cell.locations = forSesh.locations
+                    
+                    cell.sessionDataCollView.reloadData()
+                })
                 //keep going
             }
         }
         DBDownload.queryLocDPsFromSessionWithID(id: (forSesh.dbSesh?._sessionID)!, completionHandler: completionHandler)
     }
-    
 }
 extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
 {
@@ -123,12 +154,16 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayControllerCell", for: indexPath) as! sessionDisplayCollectionTableViewCell
         cell.gearLabel.text = allSessions[indexPath.row].seshGear.toString()
         cell.gearLabel.adjustsFontSizeToFitWidth = true
-        cell.kiterNameLabel.text = "Ahmed Moussa"
-        cell.kiterImage = roundPic(image: thisKiter.image, picView: cell.kiterImage)
+        cell.kiterNameLabel.text = allSessions[indexPath.row].seshKiter.name
+        cell.kiterImage = roundPic(image: allSessions[indexPath.row].seshKiter.image, picView: cell.kiterImage)
         cell.spotTitleLabel.text = allSessions[indexPath.row].seshSpot.title
         cell.windLabel.text = allSessions[indexPath.row].seshWindSpeed.toString()
         cell.dateLabel.text = allSessions[indexPath.row].getFormattedDate()
-        cell.locations = allSessions[indexPath.row].locations
+        //cell.locations = allSessions[indexPath.row].locations
+        cell.seshNum = indexPath.row
+        cell.sessionDataCollView.tag = indexPath.row
+        
+        cell.sessionDataCollView.reloadData()
         return cell
         /*let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayCell", for: indexPath) as! sessionDisplayTableViewCell
          cell.gear.text = allSessions[indexPath.row].seshGear.toString()
@@ -153,13 +188,21 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         
         if let c = cell as? sessionDisplayCollectionTableViewCell
         {
-            if(allSessions[indexPath.row].locations.count == 0)
+            if(allSessions[indexPath.row].locations.count == 0){
+                c.getLocDPs()
+                //tableView.reloadData()
+            }
+            else{
+                c.checkTags(cellIndex: indexPath.row)
+            }
+            
+            /*if(allSessions[indexPath.row].locations.count == 0)
             {
                 self.getLocDPs(forSesh: allSessions[indexPath.row], cell: c)
             }
             else{
                 c.locations = allSessions[indexPath.row].locations
-            }
+            }*/
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -176,12 +219,13 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         
     }
+    
     /*
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showSessionDetails" {
-            if let vc = segue.destination as? sessionDisplayViewController {
-                vc.sesh = selectedSession
-            }
-        }
-    }*/
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     if segue.identifier == "showSessionDetails" {
+     if let vc = segue.destination as? sessionDisplayViewController {
+     vc.sesh = selectedSession
+     }
+     }
+     }*/
 }

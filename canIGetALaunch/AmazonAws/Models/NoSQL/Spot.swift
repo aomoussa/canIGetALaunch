@@ -18,6 +18,7 @@ import AWSDynamoDB
 class Spot: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     
     var _id: String?
+    var _kiterId: String?
     var _title: String?
     var _difficulties: Set<String>?
     var _launchHereLat: NSNumber?
@@ -49,6 +50,7 @@ class Spot: AWSDynamoDBObjectModel, AWSDynamoDBModeling {
     override class func jsonKeyPathsByPropertyKey() -> [AnyHashable: Any] {
         return [
             "_id" : "Id",
+            "_kiterId" : "kiterId",
             "_title" : "title",
             "_difficulties" : "difficulties",
             "_launchHereLat" : "launchHereLat",

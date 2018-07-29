@@ -22,12 +22,14 @@ class gear
     var kiteType = "inflatable LE"
     var kiteSize = 9
     var kiteBrand = "Liquid Force"
+    var dbGear = Gear()
     init()
     {
         self.id = NSUUID().uuidString
     }
     init(fromGear: Gear)
     {
+        dbGear = fromGear
         self.id = NSUUID().uuidString
         boardType = fromGear._boardType!
         boardSize = Int(fromGear._boardSize!)

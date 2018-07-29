@@ -11,6 +11,21 @@ import AWSDynamoDB
 
 class DBUploadHandler
 {
+    func removeItem(itemToDelete: Any)
+    {
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        dynamoDbObjectMapper.remove(itemToDelete as! AWSDynamoDBObjectModel).continueWith(block: {
+            (task:AWSTask<AnyObject>!) -> Any? in
+            if let error = task.error {
+                print("Error in \(#function):\n\(error)")
+            }
+            else
+            {
+                print("item deleted")
+            }
+            return nil
+        })
+    }
     func createSpot(_ spot: Spot, completionHandler: @escaping (_ error: Error?) -> Void) {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
         
@@ -23,6 +38,11 @@ class DBUploadHandler
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
 
         dynamoDbObjectMapper.save(sesh, completionHandler: completionHandler)
+    }
+    func createKiter(_ kiter: Kiter, completionHandler: @escaping (_ error: Error?) -> Void) {
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        
+        dynamoDbObjectMapper.save(kiter, completionHandler: completionHandler)
     }
     func createLocDP(_ locDP: LocationDataPoint)
     {

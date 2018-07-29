@@ -49,7 +49,7 @@ extension sessionDisplayViewController: UITableViewDelegate, UITableViewDataSour
         cell.wind.text = sesh.seshWindSpeed.toString()
         cell.date.text = sesh.date.description
         cell.locations = sesh.locations
-        
+        cell.seshNum = indexPath.row
         let windArrow = UILabel(frame: CGRect(x: width*0.2, y: height*0.4, width: width*0.1, height: width*0.2))
         windArrow.transform = CGAffineTransform(rotationAngle: 2*CGFloat.pi*0.1)
         cell.addSubview(windArrow)

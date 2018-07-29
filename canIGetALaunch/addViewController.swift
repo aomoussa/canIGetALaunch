@@ -98,7 +98,7 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
     func makeSubmitCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
-        cell.backgroundColor = UIColor(colorLiteralRed: 1, green: 57/255, blue: 105/255, alpha: 0.8)
+        cell.backgroundColor = UIColor(red: 1, green: 57/255, blue: 105/255, alpha: 0.8)
         switch(submitState)
         {
         case "tracking":

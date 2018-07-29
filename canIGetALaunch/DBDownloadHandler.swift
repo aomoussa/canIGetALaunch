@@ -26,6 +26,26 @@ class DBDownloadHandler
             })
         })
     }
+    func querySpotWithID(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        // 1) Configure the query
+        let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.filterExpression = "#id = :id"
+        scanExpression.expressionAttributeNames = [
+            "#id": "id"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":id": id
+        ]
+        
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        
+        dynamoDbObjectMapper.scan(Spot.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
     func queryGearWithID(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
         // 1) Configure the query
         let scanExpression = AWSDynamoDBScanExpression()
@@ -66,6 +86,26 @@ class DBDownloadHandler
             })
         })
     }
+    func queryKiterWithID(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        // 1) Configure the query
+        let scanExpression = AWSDynamoDBScanExpression()
+        scanExpression.filterExpression = "#kiterId = :id"
+        scanExpression.expressionAttributeNames = [
+            "#kiterId": "kiterId"
+        ]
+        scanExpression.expressionAttributeValues = [
+            ":id": id
+        ]
+        
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        
+        dynamoDbObjectMapper.scan(Kiter.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
     func queryLocDPsFromSessionWithIDAndMinSpeed(id: String, completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
         // 1) Configure the query
         let minSpeed = 5
@@ -99,6 +139,19 @@ class DBDownloadHandler
         scanExpression.expressionAttributeValues = [
             ":id": id
         ]
+        
+        let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
+        
+        dynamoDbObjectMapper.scan(LocationDataPoint.self, expression: scanExpression, completionHandler: {(response: AWSDynamoDBPaginatedOutput?, error: Error?) -> Void in
+            DispatchQueue.main.async(execute: {
+                completionHandler(response, error)
+                
+            })
+        })
+    }
+    func queryLocDPs(completionHandler: @escaping (_ response: AWSDynamoDBPaginatedOutput?, _ error: Error?) -> Void) {
+        // 1) Configure the query
+        let scanExpression = AWSDynamoDBScanExpression()
         
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
         
