@@ -50,8 +50,8 @@ class sessionMapCollectionViewCell: UICollectionViewCell {
             
             if(allPoints.count > 0){
                 
-                let polygon = MKPolygon.init(coordinates: allPoints, count: allPoints.count)
-                self.sessionMap.setRegion(MKCoordinateRegionForMapRect(polygon.boundingMapRect), animated: true)
+                //let polygon = MKPolygon.init(coordinates: allPoints, count: allPoints.count)
+                self.sessionMap.setRegion(MKCoordinateRegion(center: allPoints[0], span: MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)) , animated: true)
             }
             lineDisplayed = true
         }

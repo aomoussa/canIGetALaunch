@@ -16,9 +16,10 @@
 		893D347520D87E6F005CE4CA /* DBDownloadHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D347420D87E6F005CE4CA /* DBDownloadHandler.swift */; };
 		893E3B74210229B600FC8A58 /* kiterProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */; };
 		8953DBD420F68C03009162D0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8953DBD320F68C03009162D0 /* Assets.xcassets */; };
-		8953DBD620FD33B8009162D0 /* mapTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8953DBD520FD33B8009162D0 /* mapTestViewController.swift */; };
 		8954E03320D4D72B0015BB5B /* friendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8954E03220D4D72B0015BB5B /* friendsViewController.swift */; };
 		8961BA7320E1E23600767065 /* sessionDisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8961BA7220E1E23600767065 /* sessionDisplayViewController.swift */; };
+		896E48CB210FB0780079DD67 /* multipleSessionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896E48CA210FB0780079DD67 /* multipleSessionsTableViewCell.swift */; };
+		896E48CD210FB6170079DD67 /* descriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896E48CC210FB6170079DD67 /* descriptionTableViewCell.swift */; };
 		897F745420D5AECA00B9AEE9 /* newsFeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897F745320D5AECA00B9AEE9 /* newsFeedViewController.swift */; };
 		8983538320D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8983538220D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift */; };
 		8991ECD620CDB6A90031BE97 /* spot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8991ECD520CDB6A90031BE97 /* spot.swift */; };
@@ -63,9 +64,10 @@
 		893D347420D87E6F005CE4CA /* DBDownloadHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBDownloadHandler.swift; sourceTree = "<group>"; };
 		893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = kiterProfileTableViewCell.swift; sourceTree = "<group>"; };
 		8953DBD320F68C03009162D0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8953DBD520FD33B8009162D0 /* mapTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapTestViewController.swift; sourceTree = "<group>"; };
 		8954E03220D4D72B0015BB5B /* friendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = friendsViewController.swift; sourceTree = "<group>"; };
 		8961BA7220E1E23600767065 /* sessionDisplayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sessionDisplayViewController.swift; sourceTree = "<group>"; };
+		896E48CA210FB0780079DD67 /* multipleSessionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = multipleSessionsTableViewCell.swift; sourceTree = "<group>"; };
+		896E48CC210FB6170079DD67 /* descriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = descriptionTableViewCell.swift; sourceTree = "<group>"; };
 		897F745320D5AECA00B9AEE9 /* newsFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newsFeedViewController.swift; sourceTree = "<group>"; };
 		8983538220D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sessionTrackerTableViewCell.swift; sourceTree = "<group>"; };
 		8991ECD520CDB6A90031BE97 /* spot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = spot.swift; sourceTree = "<group>"; };
@@ -182,13 +184,13 @@
 				89B4794B20D17F7D00F64CC8 /* classes */,
 				89B4794A20D17F6100F64CC8 /* cells */,
 				89ABB4CA20BB38FC00104C1D /* AppDelegate.swift */,
+				89F0241220EBF87E0055196E /* loginViewController.swift */,
 				89ABB4CC20BB38FC00104C1D /* spotsViewController.swift */,
 				8904A49A20D2D87A0067D328 /* createSpotViewController.swift */,
 				89ABB4CE20BB38FC00104C1D /* addViewController.swift */,
 				89ABB4D020BB38FC00104C1D /* Main.storyboard */,
-				8953DBD520FD33B8009162D0 /* mapTestViewController.swift */,
+				896E48CC210FB6170079DD67 /* descriptionTableViewCell.swift */,
 				8953DBD320F68C03009162D0 /* Assets.xcassets */,
-				89F0241220EBF87E0055196E /* loginViewController.swift */,
 				89F19C4120F1416800EB06DD /* FBSDKRequestHandler.swift */,
 				8961BA7220E1E23600767065 /* sessionDisplayViewController.swift */,
 				897F745320D5AECA00B9AEE9 /* newsFeedViewController.swift */,
@@ -211,6 +213,7 @@
 				890E0D9D20E554FD002C13DA /* sessionMapCollectionViewCell.swift */,
 				89F0241020EA7F530055196E /* sessionDataTableCollectionViewCell.swift */,
 				893E3B73210229B600FC8A58 /* kiterProfileTableViewCell.swift */,
+				896E48CA210FB0780079DD67 /* multipleSessionsTableViewCell.swift */,
 			);
 			name = cells;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 					89ABB4C620BB38FC00104C1D = {
 						CreatedOnToolsVersion = 8.2.1;
 						DevelopmentTeam = C39656PGLG;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -408,6 +412,7 @@
 				893E3B74210229B600FC8A58 /* kiterProfileTableViewCell.swift in Sources */,
 				89B4794920D17ED300F64CC8 /* windSpeed.swift in Sources */,
 				899B7A5920D300F200A3F0EB /* spotLocationPickerTableViewCell.swift in Sources */,
+				896E48CD210FB6170079DD67 /* descriptionTableViewCell.swift in Sources */,
 				8904A49320D1DDB20067D328 /* session.swift in Sources */,
 				8983538320D80C8D00A63FA0 /* sessionTrackerTableViewCell.swift in Sources */,
 				89AF143220D4BA6300B0E1AA /* seasonTableViewCell.swift in Sources */,
@@ -421,9 +426,9 @@
 				89C9DA0720E54E4D0010415C /* sessionDisplayCollectionTableViewCell.swift in Sources */,
 				89D02B1220DB425D00447DA3 /* sessionDisplayTableViewCell.swift in Sources */,
 				8904A49B20D2D87A0067D328 /* createSpotViewController.swift in Sources */,
+				896E48CB210FB0780079DD67 /* multipleSessionsTableViewCell.swift in Sources */,
 				897F745420D5AECA00B9AEE9 /* newsFeedViewController.swift in Sources */,
 				89F0241120EA7F530055196E /* sessionDataTableCollectionViewCell.swift in Sources */,
-				8953DBD620FD33B8009162D0 /* mapTestViewController.swift in Sources */,
 				89ABB4CB20BB38FC00104C1D /* AppDelegate.swift in Sources */,
 				8904A49720D1E3350067D328 /* datePickerTableViewCell.swift in Sources */,
 				89ABB4CD20BB38FC00104C1D /* spotsViewController.swift in Sources */,
@@ -568,7 +573,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aomoussa.canIGetALaunch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -584,7 +590,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.aomoussa.canIGetALaunch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

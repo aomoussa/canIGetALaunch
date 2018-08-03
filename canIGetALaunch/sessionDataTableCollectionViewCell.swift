@@ -109,7 +109,7 @@ class sessionDataTableCollectionViewCell: UICollectionViewCell {
         }
         line.path = linePath.cgPath
         line.lineWidth = 1
-        line.lineJoin = kCALineJoinRound
+        line.lineJoin = "round"//CAShapeLayerLineJoin.round
         return line
         
         

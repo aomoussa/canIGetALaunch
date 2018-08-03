@@ -145,12 +145,44 @@ class newsFeedViewController: UIViewController {
 extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
 {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allSessions.count
+        switch(section)
+        {
+        case 0:
+            return 1
+        case 1:
+            return 1
+        default:
+            return allSessions.count
+        }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch(indexPath.section)
+        {
+        case 0:
+            return makeViewDescriptionCell(tableView: tableView, indexPath: indexPath)
+        case 1:
+            return makeMultipleSessionCell(tableView: tableView, indexPath: indexPath)
+        default:
+            return makeSessionCell(tableView: tableView, indexPath: indexPath)
+        }
+    }
+    func makeViewDescriptionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell", for: indexPath) as! descriptionTableViewCell
+        cell.descriptionLabel.text = "Wanna see how your buddies living the kite life have been conquering beaches, lakes, and rivers around the world? Zoom in to see, these public sessions fellow kiters wanted to share, close up:"
+        return cell
+    }
+    func makeMultipleSessionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "multipleSessionCell", for: indexPath) as! multipleSessionsTableViewCell
+        cell.titleLabel.text = "Public Sessions"
+        return cell
+    }
+    func makeSessionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayControllerCell", for: indexPath) as! sessionDisplayCollectionTableViewCell
         cell.gearLabel.text = allSessions[indexPath.row].seshGear.toString()
         cell.gearLabel.adjustsFontSizeToFitWidth = true
@@ -165,21 +197,13 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         
         cell.sessionDataCollView.reloadData()
         return cell
-        /*let cell = tableView.dequeueReusableCell(withIdentifier: "sessionDisplayCell", for: indexPath) as! sessionDisplayTableViewCell
-         cell.gear.text = allSessions[indexPath.row].seshGear.toString()
-         cell.kiterName.text = "Ahmed Moussa"
-         cell.spotTitle.text = allSessions[indexPath.row].seshSpot.title
-         cell.wind.text = allSessions[indexPath.row].seshWindSpeed.toString()
-         cell.date.text = allSessions[indexPath.row].date.description
-         
-         return cell*/
     }
     func roundPic(image: UIImage, picView: UIImageView) -> UIImageView
     {
         picView.image = image
         picView.layer.borderWidth = 1
         picView.layer.masksToBounds = false
-        picView.layer.borderColor = UIColor(colorLiteralRed: 1, green: 57/255, blue: 105/255, alpha: 1).cgColor
+        picView.layer.borderColor = UIColor(red: 1, green: 57/255, blue: 105/255, alpha: 1).cgColor
         picView.layer.cornerRadius = picView.frame.width/1.9
         picView.clipsToBounds = true
         return picView
@@ -206,19 +230,23 @@ extension newsFeedViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch(indexPath.row)
+        switch(indexPath.section)
         {
-        case selectedSessionIndex:
+        case 0:
+            return self.view.frame.height*0.3
+        case 1:
             return self.view.frame.width*1.2
         default:
             return self.view.frame.width*1.2
         }
     }
+    /*
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedSessionIndex = indexPath.row
-        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         
-    }
+        selectedSessionIndex = indexPath.row
+        tableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+        
+    }*/
     
     /*
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

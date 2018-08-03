@@ -22,7 +22,7 @@ class spotLocationPickerTableViewCell: UITableViewCell {
     var launchCoordinates = CLLocationCoordinate2D()
     var waterStartCoordinates = CLLocationCoordinate2D()
     
-    func draggedParkView(_ sender:UIPanGestureRecognizer)
+    @objc func draggedParkView(_ sender:UIPanGestureRecognizer)
     {
         self.bringSubview(toFront: parkHereImage)
         let translation = sender.translation(in: self)
@@ -33,7 +33,7 @@ class spotLocationPickerTableViewCell: UITableViewCell {
         parkCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
         theSpot.parkHere = parkCoordinates
     }
-    func draggedRigView(_ sender:UIPanGestureRecognizer)
+    @objc func draggedRigView(_ sender:UIPanGestureRecognizer)
     {
         self.bringSubview(toFront: rigHereImage)
         let translation = sender.translation(in: self)
@@ -44,7 +44,7 @@ class spotLocationPickerTableViewCell: UITableViewCell {
         rigCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
         theSpot.rigHere = rigCoordinates
     }
-    func draggedLaunchView(_ sender:UIPanGestureRecognizer)
+    @objc func draggedLaunchView(_ sender:UIPanGestureRecognizer)
     {
         self.bringSubview(toFront: launchHereImage)
         let translation = sender.translation(in: self)
@@ -55,7 +55,7 @@ class spotLocationPickerTableViewCell: UITableViewCell {
         launchCoordinates = mapView.convert(point, toCoordinateFrom: self.mapView)
         theSpot.launchHere = launchCoordinates
     }
-    func draggedWaterStartView(_ sender:UIPanGestureRecognizer)
+    @objc func draggedWaterStartView(_ sender:UIPanGestureRecognizer)
     {
         self.bringSubview(toFront: waterStartHereImage)
         let translation = sender.translation(in: self)

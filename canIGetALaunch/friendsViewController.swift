@@ -50,7 +50,7 @@ class friendsViewController: UIViewController {
     
     
     //Calls this function when the tap is recognized.
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
         
@@ -75,12 +75,16 @@ extension friendsViewController: UITextViewDelegate
 extension friendsViewController: UITableViewDelegate, UITableViewDataSource
 {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 4
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section)
         {
         case 0:
+            return 1
+        case 1:
+            return 1
+        case 2:
             return 1
         default:
             return allSessions.count
@@ -91,10 +95,26 @@ extension friendsViewController: UITableViewDelegate, UITableViewDataSource
         switch(indexPath.section)
         {
         case 0:
+            return makeViewDescriptionCell(tableView: tableView, indexPath: indexPath)
+        case 1:
             return makeProfileCell(tableView: tableView, indexPath: indexPath)
+        case 2:
+            return makeMultipleSessionCell(tableView: tableView, indexPath: indexPath)
         default:
             return makeSessionCell(tableView: tableView, indexPath: indexPath)
         }
+    }
+    func makeViewDescriptionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell", for: indexPath) as! descriptionTableViewCell
+        cell.descriptionLabel.text = "If drawing out your kite sessions all over the world and sharing them with fellow wind worshipers sounds as epic to you as it does to me, perhaps you would like to use the personal sessions map feature of the app, check it out!"
+        return cell
+    }
+    func makeMultipleSessionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "multipleSessionCell", for: indexPath) as! multipleSessionsTableViewCell
+        cell.titleLabel.text = "\(thisKiter.name)'s Sessions"
+        return cell
     }
     func makeProfileCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
@@ -104,7 +124,7 @@ extension friendsViewController: UITableViewDelegate, UITableViewDataSource
         circleImageView(image: cell.kiterPic)
         return cell
     }
-    func deleteSession(_ sender: UIButton)
+    @objc func deleteSession(_ sender: UIButton)
     {
         print(allSessions[sender.tag].seshSpot.title)
         for loc in allSessions[sender.tag].locDPs
@@ -129,7 +149,7 @@ extension friendsViewController: UITableViewDelegate, UITableViewDataSource
         cell.dateLabel.text = allSessions[indexPath.row].getFormattedDate()
         //cell.locations = allSessions[indexPath.row].locations
         cell.deleteSessionButton.tag = indexPath.row
-        cell.deleteSessionButton.addTarget(self, action: #selector(friendsViewController.deleteSession(_:)), for: UIControlEvents.touchUpInside)
+        cell.deleteSessionButton.addTarget(self, action: #selector(friendsViewController.deleteSession(_:)), for: .touchUpInside)
         cell.seshNum = indexPath.row
         return cell
     }
@@ -167,6 +187,8 @@ extension friendsViewController: UITableViewDelegate, UITableViewDataSource
         switch(indexPath.section)
         {
         case 0:
+            return self.view.frame.height*0.3
+        case 1:
             return self.view.frame.width*0.8
         default:
             return self.view.frame.width*1.2

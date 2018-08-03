@@ -69,7 +69,7 @@ class kiter
     {
         let completionHandler: FBSDKGraphRequestHandler = { (connection, result, error) -> Void in
             if (error == nil){
-                print("facebook login result: \(result)")
+                print("facebook login result: \(String(describing: result))")
                 
                 let data:[String:AnyObject] = result as! [String : AnyObject]
                 
@@ -103,7 +103,7 @@ class kiter
             }
             else
             {
-                print(error)
+                print(error!)
             }
         }
         FBSDKRequestHandler.fbHandler.returnUserData(completionHandler: completionHandler)
@@ -116,10 +116,10 @@ class kiter
             var location = 0
             while location < range.length {
                 var r = NSRange()
-                let attrDictionary = attrString.attributes(at: location, effectiveRange: &r)
+                let attrDictionary = convertFromNSAttributedStringKeyDictionary(attrString.attributes(at: location, effectiveRange: &r))
                 if attrDictionary != nil {
                     // Swift.print(attrDictionary!)
-                    let attachment = attrDictionary[NSAttachmentAttributeName] as? NSTextAttachment
+                    let attachment = attrDictionary[convertFromNSAttributedStringKey(NSAttributedStringKey.attachment)] as? NSTextAttachment
                     if attachment != nil {
                         if attachment!.image != nil {
                             // your code to use attachment!.image as appropriate
@@ -136,3 +136,13 @@ class kiter
 }
 var allKiters = [kiter]()
 var thisKiter = kiter()
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKeyDictionary(_ input: [NSAttributedStringKey: Any]) -> [String: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedStringKey) -> String {
+	return input.rawValue
+}

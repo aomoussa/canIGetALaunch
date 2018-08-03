@@ -13,12 +13,13 @@ class createSpotViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var spotNameSection = 0
-    var spotLocationsSection = 1
-    var difficultySection = 2
-    var windDirectionSection = 3
-    var seasonSection = 4
-    var submitSection = 5
+    var viewDescriptionSection = 0
+    var spotNameSection = 1
+    var spotLocationsSection = 2
+    var difficultySection = 3
+    var windDirectionSection = 4
+    var seasonSection = 5
+    var submitSection = 6
     
     var spotNameState = "max"//min//picked
     var spotLocationPickerState = "max"//min//saved?
@@ -27,7 +28,7 @@ class createSpotViewController: UIViewController {
     var seasonState = "max"//"min"
     var submitState = "unpicked"//picked
     
-
+    
     
     
     
@@ -60,7 +61,7 @@ class createSpotViewController: UIViewController {
 extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
 {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 7
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -68,6 +69,8 @@ extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch(indexPath.section)
         {
+        case viewDescriptionSection:
+            return makeViewDescriptionCell(tableView: tableView, indexPath: indexPath)
         case spotNameSection:
             return makeSpotNameCell(tableView: tableView, cellForRowAt: indexPath)
         case spotLocationsSection:
@@ -87,13 +90,18 @@ extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
         }
         
     }
-    
+    func makeViewDescriptionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell", for: indexPath) as! descriptionTableViewCell
+        cell.descriptionLabel.text = "Give back to the community that made you epic! Share your knowledge of spots with the less experienced, they're trying really hard to get better and stay safe! Zoom in to the spot area and drag pins to their corresponding locations, you can see your spot on the spot map after you submit it! Let me know if you have any trouble using this functionality through aomoussa@gmail.com or +14802748021"
+        return cell
+    }
     func makeSubmitCell(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
         cell.title.text = "Submit"
-
+        
         cell.backgroundColor = UIColor.blue
         return cell
     }
@@ -183,6 +191,8 @@ extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch(indexPath.section)
         {
+        case viewDescriptionSection:
+            return self.view.frame.height*0.5
         case spotNameSection:
             switch(spotNameState)
             {
@@ -300,7 +310,7 @@ extension createSpotViewController: UITableViewDelegate, UITableViewDataSource
                     print("An item was saved.")
                 })
                 allSpots.append(theSpot)
-                //do something with "theSpot"
+            //do something with "theSpot"
             default:
                 break
             }

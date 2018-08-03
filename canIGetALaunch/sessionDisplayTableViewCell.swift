@@ -82,8 +82,8 @@ class sessionDisplayTableViewCell: UITableViewCell {
         
         if(allPoints.count > 0){
             
-            let polygon = MKPolygon.init(coordinates: allPoints, count: allPoints.count)  //points: line.points(), count: line.pointCount)
-            self.sessionMap.setRegion(MKCoordinateRegionForMapRect(polygon.boundingMapRect), animated: true)
+            //let polygon = MKPolygon.init(coordinates: allPoints, count: allPoints.count)  //points: line.points(), count: line.pointCount)
+            self.sessionMap.setRegion(MKCoordinateRegion(center: allPoints[0], span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)), animated: true)
         }
     }
     

@@ -178,11 +178,23 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         switchSpotState(to: "allSpots")
         mapView.showAnnotations(self.mapView.annotations, animated: false)
+        showAlert(withMsg: "Check out these kiting spots, tap a pin to see parking/rigging/launching/waterstarting locations for that spot. Tap \"Add Spot\" to create your own spot!")
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        //mapView.removeAnnotations(mapView.annotations)
+    func showAlert(withMsg: String)
+    {
+        let alert = UIAlertController(title: "Notice", message: withMsg, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+                
+            case .cancel:
+                print("cancel")
+                
+            case .destructive:
+                print("destructive")
+            }}))
+        self.present(alert, animated: true, completion: nil)
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
@@ -351,7 +363,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     image = resizeImage(image: thisKiter.image, newWidth: 50)
                     break
                 default:
-                    image = resizeImage(image: thisKiter.image, newWidth: 50)
+                    image = resizeImage(image: UIImage(named: "AppIcon.png")!, newWidth: 80)
                 }
                 
                 
@@ -362,6 +374,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                         image = thisKiter.imageFromBitmoji()//UIImage(named: "second.jpg")
                     }
                 }
+                
                 let imageView = makeImageViewAndCircle(image: image!)
                 anView?.addSubview(imageView)
                 anView?.frame = imageView.frame
@@ -395,7 +408,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
                     image = resizeImage(image: thisKiter.image, newWidth: 50)
                     break
                 default:
-                    image = resizeImage(image: thisKiter.image, newWidth: 50)
+                    image = resizeImage(image: UIImage(named: "AppIcon.png")!, newWidth: 80)
                 }
                 anView?.annotation = annotation
             }
@@ -414,6 +427,7 @@ class spotsViewController: UIViewController, MKMapViewDelegate {
             {
                 view.removeFromSuperview()
             }
+            
             let imageView = makeImageViewAndCircle(image: image!)
             anView?.addSubview(imageView)
             anView?.frame = imageView.frame

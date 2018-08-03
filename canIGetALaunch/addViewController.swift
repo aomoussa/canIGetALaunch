@@ -7,17 +7,19 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
 class addViewController: UIViewController {
     
     @IBOutlet weak var seshDetailsTableView: UITableView!
     
-    var spotSectionNum = 0
-    var dateSectionNum = 1
-    var windSpeedSectionNum = 2
-    var gearSectionNum = 3
-    var trackerSectionNum = 4
-    var submitSectionNum = 5
+    var viewDescriptionSectionNum = 0
+    var spotSectionNum = 1
+    var dateSectionNum = 2
+    var windSpeedSectionNum = 3
+    var gearSectionNum = 4
+    var trackerSectionNum = 5
+    var submitSectionNum = 6
     
     var pickSpotState = "min"//"max"
     var pickedSpot = spot()
@@ -48,7 +50,7 @@ class addViewController: UIViewController {
 }
 extension addViewController: UITableViewDelegate, UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 7
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch(section)
@@ -79,6 +81,8 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
         
         switch(indexPath.section)
         {
+        case viewDescriptionSectionNum:
+            return makeViewDescriptionCell(tableView: tableView, indexPath: indexPath)
         case spotSectionNum:
             return makeSpotPickerCell(tableView: tableView, indexPath: indexPath)
         case dateSectionNum:
@@ -95,32 +99,44 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             return UITableViewCell()
         }
     }
+    func makeViewDescriptionCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell", for: indexPath) as! descriptionTableViewCell
+        cell.descriptionLabel.text = "If drawing out your kite sessions all over the world and sharing them with fellow wind worshipers sounds as epic to you as it does to me, you can use this session tracker functionality to save and display your kiteprints on an interactive map. Coming soon: pins for jumps higher than 10ft, pick bitmojis for the pins that capture your thoughts on the jumps! Hit me up if you wanna work together on a small cheap wifi camera that generates gifs of specific events or wifi wind meter for time-synchronized data on upwinding efficiency? Let me know if you have any trouble using this functionality through aomoussa@gmail.com or +14802748021"
+        return cell
+    }
     func makeSubmitCell(tableView: UITableView, indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "justTitleCell")! as! justTitleTableViewCell
         cell.backgroundColor = UIColor(red: 1, green: 57/255, blue: 105/255, alpha: 0.8)
-        switch(submitState)
-        {
-        case "tracking":
-            cell.title.text = "Submit"
-            break
-        case "submittedNotTracking":
-            cell.title.text = "Submitted, Resume?"
-            break
-        case "submittedTracking":
-            cell.title.text = "Submitted, Still Tracking... Stop?"
-            break
-        case "submitting":
-            cell.title.text = "Currently Uploading..."
+        if((FBSDKAccessToken.current()) != nil){
+            switch(submitState)
+            {
+            case "tracking":
+                cell.title.text = "Submit"
+                break
+            case "submittedNotTracking":
+                cell.title.text = "Submitted, Resume?"
+                break
+            case "submittedTracking":
+                cell.title.text = "Submitted, Still Tracking... Stop?"
+                break
+            case "submitting":
+                cell.title.text = "Currently Uploading..."
+                cell.backgroundColor = UIColor.lightGray
+                break
+            case "problemUploading":
+                cell.title.text = "Problem Uploading... Tap to try again"
+                cell.title.adjustsFontSizeToFitWidth = true
+                cell.backgroundColor = UIColor.lightGray
+                break
+            default://"untapped"
+                cell.title.text = "Start Tracking"
+            }
+        }
+        else{
+            cell.title.text = "Gotta login to log sessions"
             cell.backgroundColor = UIColor.lightGray
-            break
-        case "problemUploading":
-            cell.title.text = "Problem Uploading... Tap to try again"
-            cell.title.adjustsFontSizeToFitWidth = true
-            cell.backgroundColor = UIColor.lightGray
-            break
-        default://"untapped"
-            cell.title.text = "Start Tracking"
         }
         return cell
         
@@ -215,7 +231,7 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             return cell
         }
     }
-    func dateChanged(_ Sender: UIDatePicker)
+    @objc func dateChanged(_ Sender: UIDatePicker)
     {
         theSesh.date = Sender.date as NSDate
     }
@@ -388,99 +404,101 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
             tableView.reloadSections([trackerSectionNum], with: UITableViewRowAnimation.fade)
             break
         case submitSectionNum:
-            switch(submitState)
-            {
-            case "problemUploading":
-                submitState = ""
-            case "tracking":
-                submitState = "submitting"
-                theSesh.seshGear = gearStuff
-                theSesh.seshSpot = pickedSpot
-                theSesh.seshWindSpeed = windSpeedStuff
-                theSesh.active = false
-                allSessions.append(theSesh)
-                let dbGear = theSesh.seshGear.makeDBGear()
-                let dbWind = theSesh.seshWindSpeed.makeDBWind()
-                let sessionCompletionHandler = {
-                    (error: Error?) -> Void in
-                    
-                    if let error = error {
-                        print("Amazon DynamoDB Save Error: \(error)")
-                        self.submitState = "problemUploading"
-                        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-                        if(self.trackerState == "min")
-                        {
-                            tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+            if((FBSDKAccessToken.current()) != nil){
+                switch(submitState)
+                {
+                case "problemUploading":
+                    submitState = ""
+                case "tracking":
+                    submitState = "submitting"
+                    theSesh.seshGear = gearStuff
+                    theSesh.seshSpot = pickedSpot
+                    theSesh.seshWindSpeed = windSpeedStuff
+                    theSesh.active = false
+                    allSessions.append(theSesh)
+                    let dbGear = theSesh.seshGear.makeDBGear()
+                    let dbWind = theSesh.seshWindSpeed.makeDBWind()
+                    let sessionCompletionHandler = {
+                        (error: Error?) -> Void in
+                        
+                        if let error = error {
+                            print("Amazon DynamoDB Save Error: \(error)")
+                            self.submitState = "problemUploading"
+                            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                            if(self.trackerState == "min")
+                            {
+                                tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+                            }
+                            return
                         }
-                        return
+                        DispatchQueue.main.async(execute: {
+                            print("An item was saved.")
+                            self.submitState = "submittedNotTracking"
+                            tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
+                            if(self.trackerState == "min")
+                            {
+                                tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+                            }
+                        })
                     }
-                    DispatchQueue.main.async(execute: {
+                    let windCompletionHandler = {
+                        (error: Error?) -> Void in
+                        
+                        if let error = error {
+                            print("Amazon DynamoDB Save Error: \(error)")
+                            self.submitState = "problemUploading"
+                            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                            if(self.trackerState == "min")
+                            {
+                                tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+                            }
+                            return
+                        }
                         print("An item was saved.")
-                        self.submitState = "submittedNotTracking"
-                        tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
-                        if(self.trackerState == "min")
-                        {
-                            tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
-                        }
-                    })
-                }
-                let windCompletionHandler = {
-                    (error: Error?) -> Void in
-                    
-                    if let error = error {
-                        print("Amazon DynamoDB Save Error: \(error)")
-                        self.submitState = "problemUploading"
-                        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-                        if(self.trackerState == "min")
-                        {
-                            tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
-                        }
-                        return
+                        DBUpload.createSesh(theSesh.makeDBSession(fromGear: dbGear, fromWindSpeed: dbWind), completionHandler: sessionCompletionHandler)
+                        
                     }
-                    print("An item was saved.")
-                    DBUpload.createSesh(theSesh.makeDBSession(fromGear: dbGear, fromWindSpeed: dbWind), completionHandler: sessionCompletionHandler)
-                    
-                }
-                let gearCompletionHandler = {
-                    (error: Error?) -> Void in
-                    
-                    if let error = error {
-                        print("Amazon DynamoDB Save Error: \(error)")
-                        self.submitState = "problemUploading"
-                        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-                        if(self.trackerState == "min")
-                        {
-                            tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+                    let gearCompletionHandler = {
+                        (error: Error?) -> Void in
+                        
+                        if let error = error {
+                            print("Amazon DynamoDB Save Error: \(error)")
+                            self.submitState = "problemUploading"
+                            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+                            if(self.trackerState == "min")
+                            {
+                                tableView.reloadRows(at: [IndexPath.init(row: 0, section: self.trackerSectionNum)], with: UITableViewRowAnimation.fade)
+                            }
+                            return
                         }
-                        return
+                        print("An item was saved.")
+                        DBUpload.createWind(dbWind, completionHandler: windCompletionHandler)
                     }
-                    print("An item was saved.")
-                    DBUpload.createWind(dbWind, completionHandler: windCompletionHandler)
+                    
+                    
+                    DBUpload.createGear(dbGear, completionHandler: gearCompletionHandler)
+                    
+                    
+                    break
+                case "submittedTracking":
+                    theSesh.active = false
+                    submitState = "submittedNotTracking"
+                    tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
+                    break
+                case "submittedNotTracking":
+                    theSesh.active = true
+                    submitState = "submittedTracking"
+                    tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
+                    break
+                case "submitting":
+                    //do nothing until submission complete
+                    //submitState = "chilllll"
+                    break
+                default://case "untapped": //when not submitted and not tracking
+                    theSesh.active = true
+                    submitState = "tracking"
+                    tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
                 }
-                
-                
-                DBUpload.createGear(dbGear, completionHandler: gearCompletionHandler)
-                
-                
-                break
-            case "submittedTracking":
-                theSesh.active = false
-                submitState = "submittedNotTracking"
-                tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
-                break
-            case "submittedNotTracking":
-                theSesh.active = true
-                submitState = "submittedTracking"
-                tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
-                break
-            case "submitting":
-                //do nothing until submission complete
-                //submitState = "chilllll"
-                break
-            default://case "untapped": //when not submitted and not tracking
-                theSesh.active = true
-                submitState = "tracking"
-                tableView.reloadSections([self.submitSectionNum], with: UITableViewRowAnimation.fade)
             }
             if(self.trackerState == "min")
             {
@@ -494,6 +512,8 @@ extension addViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch(indexPath.section)
         {
+        case viewDescriptionSectionNum:
+            return self.view.frame.height*0.6
         case spotSectionNum:
             return 50
         case windSpeedSectionNum:

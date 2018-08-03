@@ -73,14 +73,26 @@ class loginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         circleButton(button: loginButton)
-        if((FBSDKAccessToken.current()) != nil)
-        {
-            print("should be logged in idu")
-            self.performSegue(withIdentifier: "toApp", sender: self)
-        }
         // Do any additional setup after loading the view.
     }
+    func showAlert(withMsg: String)
+    {
+        let alert = UIAlertController(title: "Notice", message: withMsg, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+                
+            case .cancel:
+                print("cancel")
+                
+            case .destructive:
+                print("destructive")
+            }}))
+        self.present(alert, animated: true, completion: nil)
+    }
     override func viewDidAppear(_ animated: Bool) {
+         showAlert(withMsg: "Fellow kiters, this app is in testing as part of an Agile sprint, send feedback/ideas to aomoussa@gmail.com or my whatsapp on +14802748021")
         if((FBSDKAccessToken.current()) != nil)
         {
             print("should be logged in idu")

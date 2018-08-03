@@ -14,7 +14,7 @@ class DBUploadHandler
     func removeItem(itemToDelete: Any)
     {
         let dynamoDbObjectMapper = AWSDynamoDBObjectMapper.default()
-        dynamoDbObjectMapper.remove(itemToDelete as! AWSDynamoDBObjectModel).continueWith(block: {
+        dynamoDbObjectMapper.remove(itemToDelete as! AWSDynamoDBObjectModel as! AWSDynamoDBObjectModel & AWSDynamoDBModeling).continueWith(block: {
             (task:AWSTask<AnyObject>!) -> Any? in
             if let error = task.error {
                 print("Error in \(#function):\n\(error)")
